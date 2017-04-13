@@ -7,23 +7,19 @@ import javafx.stage.Stage;
 
 import java.sql.*;
 
-public class Main extends Application {
+public class Main {
     public static void main(String [] args) throws SQLException {
 
-    System.out.println("Hello, World");
+        System.out.println("Hello, World");
 
 
-    MySQLConnector connector = new MySQLConnector();
+        MySQLConnector connector = new MySQLConnector();
 
-    connector.queryProject();
-
-
-}
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+        MainPage page = new MainPage(connector);
+        page.setVisible(true);
 
     }
+
 }
 
 

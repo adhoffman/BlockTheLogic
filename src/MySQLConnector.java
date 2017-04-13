@@ -34,4 +34,28 @@ public class MySQLConnector {
 
     }
 
+    public void queryProject(String query) throws SQLException {
+
+        // 1. Get a connection to database
+        Connection myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/TEST_LOGICBLOCKSTUDIOS", "student", "student");
+
+
+        // 2. Create a Statement
+        Statement myStatement = null;
+        try {
+            myStatement = myConnection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // 3. Execute SQL Query
+        ResultSet result = myStatement.executeQuery(query);
+        // 4. Process the result set
+
+        while (result.next()) {
+            System.out.println(result.getString("PROJECT_TITLE") + " , " + result.getString("SONG_COUNT"));
+        }
+
+    }
+
 }
