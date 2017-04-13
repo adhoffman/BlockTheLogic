@@ -12,10 +12,11 @@ public class MainPage extends JFrame{
     private JTextField textField1;
     private MySQLConnector connector;
     private JPanel rootPane;
-    private JTabbedPane Tabz;
+    private JTabbedPane tabbedPane1;
+    private JTabbedPane WorkflowTab;
+    private JPanel ProspectTab;
     private JPanel FollowupTab;
     private JPanel ActiveTab;
-    private JPanel ProspectTab;
     private JPanel PendingDepositTab;
     private JPanel Activetab;
     private JPanel RevisionTab;
@@ -28,13 +29,11 @@ public class MainPage extends JFrame{
         super("BlockTheLogic");
         this.connector = connector;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension (750, 750));
+        setMinimumSize(new Dimension (1200, 750));
 
         setContentPane(rootPane);
 
         setVisible(true);
-
-
     }
 
 

@@ -10,7 +10,7 @@ import java.sql.*;
 public class Main {
     public static void main(String [] args) throws SQLException {
 
-        System.out.println("Hello, World");
+        System.out.println("HI ALEX. YOUR PROGRAM IS RUNNING.. OR AT LEAST STARTED RUNNING. MAYBE. WHO KNOWS. THE CODE DOESN'T. LOVE YOU. ");
 
 
         MySQLConnector connector = new MySQLConnector();
