@@ -37,11 +37,9 @@ public class MySQLConnector {
         String todayFormatted = new SimpleDateFormat("yyyy-MM-dd").format(today);
 
         String followupDate = setInitialFollowupDate(today);
-
-
+        
         String query = buildInsertQuery(firstName,lastName,artistgroupName,email,facebookName,website,todayFormatted,todayFormatted,followupDate);
 
-        System.out.println(query);
 
         connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
         statement = null;
