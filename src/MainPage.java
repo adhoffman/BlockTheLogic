@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 /**
  * Created by alexhoffman on 4/12/17.
@@ -50,12 +51,24 @@ public class MainPage extends JFrame{
 
                     connector.addContact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText());
 
+                    clearFields();
                 } catch (SQLException e1) {
+                    e1.printStackTrace();
+                } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
 
             }
         });
+    }
+
+    private void clearFields() {
+        firstNameField.setText("");
+        lastNameField.setText("");
+        artistgroupNameField.setText("");
+        facebookNameField.setText("");
+        websitesField.setText("");
+        referencesField.setText("");
     }
 
 
