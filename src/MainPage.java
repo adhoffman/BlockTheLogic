@@ -14,7 +14,7 @@ public class MainPage extends JFrame{
     private JPanel rootPane;
     private JTabbedPane tabbedPane1;
     private JTabbedPane WorkflowTab;
-    private JPanel ProspectTab;
+    private JPanel AddContactTab;
     private JPanel FollowupTab;
     private JPanel ActiveTab;
     private JPanel PendingDepositTab;
@@ -47,7 +47,9 @@ public class MainPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    connector.addProspect(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText());
+
+                    connector.addContact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText());
+
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
