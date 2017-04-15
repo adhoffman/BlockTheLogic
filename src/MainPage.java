@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -9,6 +10,8 @@ import java.text.ParseException;
  * Created by alexhoffman on 4/12/17.
  */
 public class MainPage extends JFrame{
+    private ResultSet result;
+
     private JButton runQueryButton;
     private JTextField firstNameField;
     private MySQLConnector connector;
@@ -32,8 +35,24 @@ public class MainPage extends JFrame{
     private JTextField emailField;
     private JTextField websitesField;
     private JTextField referencesField;
+    private JButton nextButton;
+    private JLabel remainingLabel;
+    private JButton refreshButton;
+    private JTextField FU_first;
+    private JTextField FU_last;
+    private JTextField FU_email;
+    private JTextField FU_facebook;
+    private JTextField FU_lastcontact;
+    private JTextField FU_followupdate;
+    private JLabel FU_firstNameLabel;
+    private JLabel FU_followupdate_Label;
+    private JLabel FU_lastContactLabel;
+    private JLabel FU_facebook_label;
+    private JLabel FU_emailLabel;
+    private JLabel FU_lastLabel;
 
-    public MainPage(MySQLConnector connector) {
+
+    public MainPage(MySQLConnector connector) throws SQLException {
         super("BlockTheLogic");
         this.connector = connector;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +79,65 @@ public class MainPage extends JFrame{
 
             }
         });
+
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (result.next()){
+
+                        FU_first.setText(result.getString("FIRST_NAME"));
+                        FU_last.setText(result.getString("LAST_NAME"));
+                        FU_email.setText(result.getString("EMAIL"));
+                        FU_facebook.setText(result.getString("FACEBOOK_NAME"));
+                        FU_lastcontact.setText(result.getString("LAST_CONTACT_DATE"));
+                        FU_followupdate.setText(result.getString("FOLLOWUP_DATE"));
+                        //remainingLabel.setText(Integer.toString(result.getFetchSize()+1)+" Remaining");
+
+                    }else
+                    {
+                        clearFollowupFields();
+                        //remainingLabel.setText("No more Accounts");
+                        nextButton.setBorderPainted(false);
+                        nextButton.setFocusPainted(false);
+                        nextButton.setText("No More Contacts");
+                    }
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        });
+
+
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+
+                    result = connector.getFollowup();
+                    clearFollowupFields();
+
+                    nextButton.setBorderPainted(true);
+                    nextButton.setFocusPainted(true);
+                    nextButton.setText("Next");
+
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
     }
+
+    private void clearFollowupFields() {
+        FU_first.setText("");
+        FU_last.setText("");
+        FU_email.setText("");
+        FU_facebook.setText("");
+        FU_lastcontact.setText("");
+        FU_followupdate.setText("");
+    }
+
 
     private void clearFields() {
         firstNameField.setText("");

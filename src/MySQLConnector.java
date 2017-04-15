@@ -37,7 +37,7 @@ public class MySQLConnector {
         String todayFormatted = new SimpleDateFormat("yyyy-MM-dd").format(today);
 
         String followupDate = setInitialFollowupDate(today);
-        
+
         String query = buildInsertQuery(firstName,lastName,artistgroupName,email,facebookName,website,todayFormatted,todayFormatted,followupDate);
 
 
@@ -62,6 +62,22 @@ public class MySQLConnector {
             cal.setTime(date);
             cal.add(Calendar.DATE, 7);
         return new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+    }
+
+    public ResultSet getFollowup() throws SQLException {
+
+        connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
+        statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ResultSet result = statement.executeQuery("SELECT FIRST_NAME,LAST_NAME, EMAIL,FACEBOOK_NAME, LAST_CONTACT_DATE,FOLLOWUP_DATE FROM CONTACT WHERE FOLLOWUP_DATE > \"2016-01-01\";");
+
+        return result;
+
     }
 }
 
