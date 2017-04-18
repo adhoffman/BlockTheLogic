@@ -62,6 +62,7 @@ public class MainPage extends JFrame{
 
         setVisible(true);
 
+        setFollowupTextDisable();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
@@ -127,6 +128,15 @@ public class MainPage extends JFrame{
                 }
             }
         });
+    }
+
+    private void setFollowupTextDisable() {
+        FU_first.setEnabled(false);
+        FU_last.setEnabled(false);
+        FU_email.setEnabled(false);
+        FU_facebook.setEnabled(false);
+        FU_lastcontact.setEnabled(false);
+        FU_followupdate.setEnabled(false);
     }
 
     private void clearFollowupFields() {
