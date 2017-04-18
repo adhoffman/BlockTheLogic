@@ -16,20 +16,7 @@ public class MySQLConnector {
     private String database = "TEST_LOGICBLOCKSTUDIOS";
     private String user= "student";
     private String password= "student";
-
-    /*
-    public void queryProject() throws SQLException {
-
-        // 3. Execute SQL Query
-        ResultSet result = statement.executeQuery("SELECT * FROM PROJECT");
-        // 4. Process the result set
-
-        while (result.next()) {
-            System.out.println(result.getString("PROJECT_TITLE") + " , " + result.getString("SONG_COUNT"));
-        }
-
-    }
-*/
+    
 
     public void addContact(String firstName, String lastName, String artistgroupName, String email, String facebookName, String website, String references) throws SQLException, ParseException {
 
