@@ -92,12 +92,10 @@ public class MainPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                    //Check if textfields are blank
+
                 if((followupTextAreaLargerThanZero())&&(emailFieldNotBlank())){
 
                     FU_alertLabel.setText("Messagebox Populdated");
-
-                //if textfields not blank, get contact id based on email, create note record based contact id
 
 
                 try {
@@ -110,7 +108,7 @@ public class MainPage extends JFrame{
                         FU_lastcontact.setText(result.getString("LAST_CONTACT_DATE"));
                         FU_followupdate.setText(result.getString("FOLLOWUP_DATE"));
                         FU_messageTextArea.setText("");
-                        //remainingLabel.setText(Integer.toString(result.getFetchSize()+1)+" Remaining");
+
 
                     }else
                     {
@@ -154,7 +152,7 @@ public class MainPage extends JFrame{
                             FU_lastcontact.setText(result.getString("LAST_CONTACT_DATE"));
                             FU_followupdate.setText(result.getString("FOLLOWUP_DATE"));
                             FU_messageTextArea.setText("");
-                            //remainingLabel.setText(Integer.toString(result.getFetchSize()+1)+" Remaining");
+
 
                         }else
                         {
