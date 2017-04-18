@@ -36,7 +36,7 @@ public class MainPage extends JFrame{
     private JTextField websitesField;
     private JTextField referencesField;
     private JButton nextButton;
-    private JButton refreshButton;
+    private JButton grabFollowupContactsButton;
     private JTextField FU_first;
     private JTextField FU_last;
     private JTextField FU_email;
@@ -49,10 +49,12 @@ public class MainPage extends JFrame{
     private JLabel FU_facebook_label;
     private JLabel FU_emailLabel;
     private JLabel FU_lastLabel;
-    private JTextArea messageTextArea;
+    private JTextArea FU_messageTextArea;
     private JComboBox FU_communicationComboBox;
     private JLabel FU_communicationLabel;
     private JLabel FU_messageLabel;
+    private JLabel FU_alertLabel;
+    private JScrollPane FU_messageScrollPane;
 
 
     public MainPage(MySQLConnector connector) throws SQLException {
@@ -66,6 +68,8 @@ public class MainPage extends JFrame{
         setVisible(true);
 
         setFollowupTextDisable();
+        setFU_messageAreasettings();
+        populateFU_CommunicationCombobox();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
@@ -87,6 +91,15 @@ public class MainPage extends JFrame{
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                    //Check if textfields are blank
+                if((followupTextAreaLargerThanZero())&&(emailFieldNotBlank())){
+
+                    FU_alertLabel.setText("Messagebox Populdated");
+
+                //if textfields not blank, get contact id based on email, create note record based contact id
+
+
                 try {
                     if (result.next()){
 
@@ -96,6 +109,7 @@ public class MainPage extends JFrame{
                         FU_facebook.setText(result.getString("FACEBOOK_NAME"));
                         FU_lastcontact.setText(result.getString("LAST_CONTACT_DATE"));
                         FU_followupdate.setText(result.getString("FOLLOWUP_DATE"));
+                        FU_messageTextArea.setText("");
                         //remainingLabel.setText(Integer.toString(result.getFetchSize()+1)+" Remaining");
 
                     }else
@@ -110,11 +124,14 @@ public class MainPage extends JFrame{
                     e1.printStackTrace();
                 }
 
+                }else{
+                    FU_alertLabel.setText("Messagebox Not Populated");
+
+                }
+
             }
         });
-
-
-        refreshButton.addActionListener(new ActionListener() {
+        grabFollowupContactsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -126,11 +143,68 @@ public class MainPage extends JFrame{
                     nextButton.setFocusPainted(true);
                     nextButton.setText("Next");
 
+
+                    try {
+                        if (result.next()){
+
+                            FU_first.setText(result.getString("FIRST_NAME"));
+                            FU_last.setText(result.getString("LAST_NAME"));
+                            FU_email.setText(result.getString("EMAIL"));
+                            FU_facebook.setText(result.getString("FACEBOOK_NAME"));
+                            FU_lastcontact.setText(result.getString("LAST_CONTACT_DATE"));
+                            FU_followupdate.setText(result.getString("FOLLOWUP_DATE"));
+                            FU_messageTextArea.setText("");
+                            //remainingLabel.setText(Integer.toString(result.getFetchSize()+1)+" Remaining");
+
+                        }else
+                        {
+                            clearFollowupFields();
+                            //remainingLabel.setText("No more Accounts");
+                            nextButton.setBorderPainted(false);
+                            nextButton.setFocusPainted(false);
+                            nextButton.setText("No More Contacts");
+                        }
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
+
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
             }
         });
+    }
+
+    private void populateFU_CommunicationCombobox() {
+        FU_communicationComboBox.addItem("Email");
+        FU_communicationComboBox.addItem("Facebook Message");
+        FU_communicationComboBox.addItem("Phone Call");
+        FU_communicationComboBox.addItem("Text");
+        FU_communicationComboBox.addItem("In Person");
+        FU_communicationComboBox.addItem("Other");
+
+    }
+
+    private void setFU_messageAreasettings() {
+        FU_messageTextArea.setLineWrap(true);
+
+    }
+
+
+    private boolean emailFieldNotBlank() {
+        if(FU_email.getText().length()>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    private boolean followupTextAreaLargerThanZero() {
+        if(FU_messageTextArea.getText().length()>0){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     private void setFollowupTextDisable() {

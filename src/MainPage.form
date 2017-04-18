@@ -169,12 +169,12 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="77557" class="javax.swing.JButton" binding="refreshButton">
+                  <component id="77557" class="javax.swing.JButton" binding="grabFollowupContactsButton">
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Refresh"/>
+                      <text value="Grab Followup Contacts"/>
                     </properties>
                   </component>
                   <component id="4887f" class="javax.swing.JTextField" binding="FU_first">
@@ -257,16 +257,6 @@
                       <text value="Last Contact Date"/>
                     </properties>
                   </component>
-                  <component id="c57bc" class="javax.swing.JTextArea" binding="messageTextArea" default-binding="true">
-                    <constraints>
-                      <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <text value=""/>
-                    </properties>
-                  </component>
                   <component id="ec2fa" class="javax.swing.JButton" binding="nextButton" default-binding="true">
                     <constraints>
                       <grid row="9" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
@@ -313,6 +303,29 @@
                       <text value="Message"/>
                     </properties>
                   </component>
+                  <component id="7fa42" class="javax.swing.JLabel" binding="FU_alertLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <scrollpane id="2714c" binding="FU_messageScrollPane">
+                    <constraints>
+                      <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="c57bc" class="javax.swing.JTextArea" binding="FU_messageTextArea">
+                        <constraints/>
+                        <properties>
+                          <text value=""/>
+                        </properties>
+                      </component>
+                    </children>
+                  </scrollpane>
                 </children>
               </grid>
               <grid id="a3d7c" binding="ActiveTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
