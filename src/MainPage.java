@@ -36,7 +36,6 @@ public class MainPage extends JFrame{
     private JTextField websitesField;
     private JTextField referencesField;
     private JButton nextButton;
-    private JLabel remainingLabel;
     private JButton refreshButton;
     private JTextField FU_first;
     private JTextField FU_last;
@@ -50,6 +49,10 @@ public class MainPage extends JFrame{
     private JLabel FU_facebook_label;
     private JLabel FU_emailLabel;
     private JLabel FU_lastLabel;
+    private JTextArea messageTextArea;
+    private JComboBox FU_communicationComboBox;
+    private JLabel FU_communicationLabel;
+    private JLabel FU_messageLabel;
 
 
     public MainPage(MySQLConnector connector) throws SQLException {
