@@ -6,12 +6,13 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 /**
  * Created by alexhoffman on 4/12/17.
  */
 public class MainPage extends JFrame{
-    private ResultSet result;
+    private ArrayList<Contact> contactList;
 
     private JButton runQueryButton;
     private JTextField firstNameField;
@@ -56,6 +57,7 @@ public class MainPage extends JFrame{
     private JLabel FU_messageLabel;
     private JLabel FU_alertLabel;
     private JScrollPane FU_messageScrollPane;
+    private int counter = 0;
 
 
     public MainPage(DataController controller) throws SQLException {
@@ -98,29 +100,22 @@ public class MainPage extends JFrame{
                     FU_alertLabel.setText("Messagebox Populdated");
 
 
-                try {
-                    if (result.next()){
+                    if(contactList.size()>counter){
+                        Contact contact = contactList.get(counter);
 
-                        FU_first.setText(result.getString("FIRST_NAME"));
-                        FU_last.setText(result.getString("LAST_NAME"));
-                        FU_email.setText(result.getString("EMAIL"));
-                        FU_facebook.setText(result.getString("FACEBOOK_NAME"));
-                        FU_lastcontact.setText(result.getString("LAST_CONTACT_DATE"));
-                        FU_followupdate.setText(result.getString("FOLLOWUP_DATE"));
-                        FU_messageTextArea.setText("");
+                            counter +=1;
+
+                            setFollupTextFields(contact);
 
 
-                    }else
-                    {
-                        clearFollowupFields();
-                        //remainingLabel.setText("No more Accounts");
-                        nextButton.setBorderPainted(false);
-                        nextButton.setFocusPainted(false);
-                        nextButton.setText("No More Contacts");
-                    }
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
+                        }else
+                        {
+                            clearFollowupFields();
+                            nextButton.setBorderPainted(false);
+                            nextButton.setFocusPainted(false);
+                            nextButton.setText("No More Contacts");
+                        }
+
 
                 }else{
                     FU_alertLabel.setText("Messagebox Not Populated");
@@ -134,7 +129,7 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
 
-                    result = controller.getFollowup();
+                    contactList = controller.getFollowup();
                     clearFollowupFields();
 
                     nextButton.setBorderPainted(true);
@@ -142,28 +137,19 @@ public class MainPage extends JFrame{
                     nextButton.setText("Next");
 
 
-                    try {
-                        if (result.next()){
+                    if(contactList.size()>counter){
+                        Contact contact = contactList.get(counter);
 
-                            FU_first.setText(result.getString("FIRST_NAME"));
-                            FU_last.setText(result.getString("LAST_NAME"));
-                            FU_email.setText(result.getString("EMAIL"));
-                            FU_facebook.setText(result.getString("FACEBOOK_NAME"));
-                            FU_lastcontact.setText(result.getString("LAST_CONTACT_DATE"));
-                            FU_followupdate.setText(result.getString("FOLLOWUP_DATE"));
-                            FU_messageTextArea.setText("");
+                        counter +=1;
+                        setFollupTextFields(contact);
 
 
-                        }else
-                        {
-                            clearFollowupFields();
-                            //remainingLabel.setText("No more Accounts");
-                            nextButton.setBorderPainted(false);
-                            nextButton.setFocusPainted(false);
-                            nextButton.setText("No More Contacts");
-                        }
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
+                    }else
+                    {
+                        clearFollowupFields();
+                        nextButton.setBorderPainted(false);
+                        nextButton.setFocusPainted(false);
+                        nextButton.setText("No More Contacts");
                     }
 
                 } catch (SQLException e1) {
@@ -171,6 +157,16 @@ public class MainPage extends JFrame{
                 }
             }
         });
+    }
+
+    private void setFollupTextFields(Contact contact) {
+        FU_first.setText(contact.getFirstName());
+        FU_last.setText(contact.getLastName());
+        FU_email.setText(contact.getEmail());
+        FU_facebook.setText(contact.getFacebookName());
+        FU_lastcontact.setText(contact.getLastContactDate());
+        FU_followupdate.setText(contact.getFollowupDate());
+        FU_messageTextArea.setText("");
     }
 
     private void populateFU_CommunicationCombobox() {
@@ -231,6 +227,7 @@ public class MainPage extends JFrame{
         facebookNameField.setText("");
         websitesField.setText("");
         referencesField.setText("");
+        emailField.setText("");
     }
 
 

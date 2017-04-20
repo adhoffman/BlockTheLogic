@@ -42,6 +42,28 @@ public class Contact {
         this.referenceCredit =referenceCredit;
     }
 
+    public Contact(int idCONTACT, String email, String first_name, String last_name, int num_comp_projects, String artist_group_name, String ideal_client, String create_date, String last_contact_date, String mailing_list_perm, String reference_credit, String facebook_name, String websites, String pay_timely, String communication, int num_of_references, String fix_it_factor, String followup_date, int followup_seq) {
+        this.id=idCONTACT;
+        this.email=email;
+        this.firstName=first_name;
+        this.lastName=last_name;
+        this.numberOfCompletedProjects=num_comp_projects;
+        this.artistGroupName=artist_group_name;
+        this.idealClientFlag=ideal_client;
+        this.createDate=create_date;
+        this.lastContactDate=last_contact_date;
+        this.mailingListPerm=mailing_list_perm;
+        this.referenceCredit=reference_credit;
+        this.facebookName=facebook_name;
+        this.website=websites;
+        this.paysTimely=pay_timely;
+        this.communicationEfficiency=communication;
+        this.numberOfReferences=num_of_references;
+        this.fixItFactor=fix_it_factor;
+        this.followupDate=followup_date;
+        this.followupSequence=followup_seq;
+    }
+
     public String getFirstName() {
         return this.firstName;
     }
@@ -67,4 +89,11 @@ public class Contact {
     }
 
 
+    public String getLastContactDate() {
+        return this.lastContactDate;
+    }
+
+    public String getFollowupDate() {
+        return this.followupDate;
+    }
 }

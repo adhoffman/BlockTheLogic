@@ -17,9 +17,14 @@ public class MySQLConnector {
     private String user= "student";
     private String password= "student";
 
+    private ResultSetWrapper wrapper;
+
+    public MySQLConnector(){
+        wrapper = new ResultSetWrapper();
+    }
 
 
-    public ResultSet getFollowup() throws SQLException {
+    public ArrayList<Contact> getFollowup() throws SQLException {
 
         connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
         statement = null;
@@ -29,9 +34,9 @@ public class MySQLConnector {
             e.printStackTrace();
         }
 
-        ResultSet result = statement.executeQuery("SELECT FIRST_NAME,LAST_NAME, EMAIL,FACEBOOK_NAME, LAST_CONTACT_DATE,FOLLOWUP_DATE FROM CONTACT WHERE FOLLOWUP_DATE > \"2016-01-01\";");
+        ResultSet result = statement.executeQuery("SELECT * FROM CONTACT WHERE FOLLOWUP_DATE > \"2016-01-01\";");
 
-        return result;
+        return wrapper.getContactList(result);
 
     }
 

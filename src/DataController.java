@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,7 +46,7 @@ public class DataController {
         return new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
     }
 
-    public ResultSet getFollowup() throws SQLException {
+    public ArrayList<Contact> getFollowup() throws SQLException {
 
         return connector.getFollowup();
 
