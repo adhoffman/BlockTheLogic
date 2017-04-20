@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +15,7 @@ public class MainPage extends JFrame{
 
     private JButton runQueryButton;
     private JTextField firstNameField;
-    private MySQLConnector connector;
+    private DataController controller;
     private JPanel rootPane;
     private JTabbedPane tabbedPane1;
     private JTabbedPane WorkflowTab;
@@ -57,9 +58,9 @@ public class MainPage extends JFrame{
     private JScrollPane FU_messageScrollPane;
 
 
-    public MainPage(MySQLConnector connector) throws SQLException {
+    public MainPage(DataController controller) throws SQLException {
         super("BlockTheLogic");
-        this.connector = connector;
+        this.controller = controller;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension (1200, 750));
 
@@ -76,12 +77,11 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
 
-                    connector.addContact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText());
+                    //controller.addContact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText());
+                    controller.addContact(new Contact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
 
                     clearFields();
                 } catch (SQLException e1) {
-                    e1.printStackTrace();
-                } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
 
@@ -134,7 +134,7 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
 
-                    result = connector.getFollowup();
+                    result = controller.getFollowup();
                     clearFollowupFields();
 
                     nextButton.setBorderPainted(true);

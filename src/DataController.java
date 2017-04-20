@@ -24,7 +24,7 @@ public class DataController {
         Date today = new java.util.Date();
         String todayFormatted = new SimpleDateFormat("yyyy-MM-dd").format(today);
 
-        String followupDate = setInitialFollowupDate(today);
+        String followupDate = setInitialFollowupDate();
 
         String query = buildInsertQuery(firstName,lastName,artistgroupName,email,facebookName,website,todayFormatted,todayFormatted,followupDate);
 
@@ -37,10 +37,10 @@ public class DataController {
     }
 
 
-    private String setInitialFollowupDate(Date date) {
+    private String setInitialFollowupDate() {
 
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
+        cal.setTime(new java.util.Date());
         cal.add(Calendar.DATE, 7);
         return new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
     }
@@ -50,4 +50,24 @@ public class DataController {
         return connector.getFollowup();
 
     }
+
+    public void addContact(Contact contact) throws SQLException {
+
+        String todayFormatted = getTodayFormated();
+        String followupDate = setInitialFollowupDate();
+
+
+        String query = buildInsertQuery(contact.getFirstName(),contact.getLastName(),contact.getArtistGroupName(),contact.getEmail(),contact.getFacebookName(),contact.getWebsite(), todayFormatted,todayFormatted,followupDate);
+
+        connector.addContact(query);
+
+    }
+
+    private String getTodayFormated() {
+        Date today = new java.util.Date();
+        String todayFormatted = new SimpleDateFormat("yyyy-MM-dd").format(today);
+        return todayFormatted;
+    }
+
+
 }
