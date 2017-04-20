@@ -79,7 +79,7 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
 
-                    //controller.addContact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText());
+                    
                     controller.addContact(new Contact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
 
                     clearFields();

@@ -31,7 +31,6 @@ public class Contact {
 
 
     public Contact(String firstName, String lastName, String artistGroupName, String email, String facebookName, String website, String referenceCredit) {
-        //firsNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
 
         this.firstName = firstName;
         this.lastName = lastName;
