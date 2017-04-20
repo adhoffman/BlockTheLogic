@@ -79,7 +79,7 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
 
-                    
+
                     controller.addContact(new Contact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
 
                     clearFields();
@@ -94,33 +94,43 @@ public class MainPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                //Send out queries updating current account, and update counter
+                try {
+                    setFollowupDateforCurrentContact(contactList.get(counter));
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
 
-                if((followupTextAreaLargerThanZero())&&(emailFieldNotBlank())){
-
-                    FU_alertLabel.setText("Messagebox Populdated");
-
-
-                    if(contactList.size()>counter){
-                        Contact contact = contactList.get(counter);
-
-                            counter +=1;
-
-                            setFollupTextFields(contact);
+                counter +=1;
 
 
-                        }else
+                //If end of list, clear fields and disable button
+                if(contactList.size()==counter){
+
+                    endOfFollowupContacts();
+
+                }else{
+                    if((followupTextAreaLargerThanZero())&&(emailFieldNotBlank())){
+
+                        FU_alertLabel.setText("Messagebox Populdated");
+                        if(contactList.size()==counter){
+                            endOfFollowupContacts();
+
+
+                        }else//if Not end fo list, get next account and populate textfields
                         {
-                            clearFollowupFields();
-                            nextButton.setBorderPainted(false);
-                            nextButton.setFocusPainted(false);
-                            nextButton.setText("No More Contacts");
+                            Contact contact = contactList.get(counter);
+                            setFollupTextFields(contact);
                         }
 
 
-                }else{
-                    FU_alertLabel.setText("Messagebox Not Populated");
+                    }else{
+                        FU_alertLabel.setText("Messagebox Not Populated");
 
+                    }
                 }
+
+
 
             }
         });
@@ -137,26 +147,32 @@ public class MainPage extends JFrame{
                     nextButton.setText("Next");
 
 
-                    if(contactList.size()>counter){
-                        Contact contact = contactList.get(counter);
-
-                        counter +=1;
-                        setFollupTextFields(contact);
-
-
+                    if(contactList.size()==counter){
+                        endOfFollowupContacts();
                     }else
-                    {
-                        clearFollowupFields();
-                        nextButton.setBorderPainted(false);
-                        nextButton.setFocusPainted(false);
-                        nextButton.setText("No More Contacts");
+                    {  Contact contact = contactList.get(counter);
+
+                        setFollupTextFields(contact);
                     }
 
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
+                counter = 0;
             }
         });
+    }
+
+    private void endOfFollowupContacts() {
+        clearFollowupFields();
+        nextButton.setBorderPainted(false);
+        nextButton.setFocusPainted(false);
+        nextButton.setText("No More Contacts");
+        counter = 0;
+    }
+
+    private void setFollowupDateforCurrentContact(Contact contact) throws SQLException {
+        controller.setFolowupDateForContact(contact);
     }
 
     private void setFollupTextFields(Contact contact) {
@@ -217,6 +233,7 @@ public class MainPage extends JFrame{
         FU_facebook.setText("");
         FU_lastcontact.setText("");
         FU_followupdate.setText("");
+        FU_messageTextArea.setText("");
     }
 
 
@@ -231,7 +248,4 @@ public class MainPage extends JFrame{
     }
 
 
-    private void createUIComponents() {
-
-    }
 }

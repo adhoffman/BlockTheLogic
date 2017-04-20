@@ -95,4 +95,12 @@ public class Contact {
     public String getFollowupDate() {
         return this.followupDate;
     }
+
+    public int getID() {
+        return this.id;
+    }
+
+    public int getFollowupSequence() {
+        return this.followupSequence;
+    }
 }

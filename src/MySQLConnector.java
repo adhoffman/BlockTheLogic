@@ -51,5 +51,17 @@ public class MySQLConnector {
 
         statement.executeUpdate(query);
     }
+
+    public void updateFollowupDate(String query) throws SQLException {
+        connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
+        statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        statement.executeUpdate(query);
+    }
 }
 

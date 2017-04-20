@@ -1,6 +1,7 @@
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,4 +59,72 @@ public class DataController {
     }
 
 
+    public void setFolowupDateForContact(Contact contact) throws SQLException {
+
+        String newFollowupDate = calculateFollowupDate(contact.getFollowupDate(),contact.getFollowupSequence());
+        int newSeq = calSeq(contact.getFollowupSequence());
+
+        String query = "UPDATE CONTACT SET FOLLOWUP_DATE = \""+newFollowupDate+"\", FOLLOWUP_SEQ = \""+newSeq+ "\" WHERE idCONTACT = \""+Integer.toString(contact.getID())+"\"";
+        connector.updateFollowupDate(query);
+    }
+
+    private int calSeq(int followupSequence) {
+        if(followupSequence==10 || followupSequence>10){
+            return 10;
+        }else{
+            return followupSequence+1;
+        }
+
+    }
+
+    private String calculateFollowupDate(String followupDate, int followupSequence) {
+
+
+        String newFollowupDate = "";
+
+        switch(followupSequence){
+            case 1: newFollowupDate = calculateDay(7,followupDate);
+                break;
+            case 2: newFollowupDate = calculateDay(10,followupDate);
+                break;
+            case 3: newFollowupDate = calculateDay(14,followupDate);
+                break;
+            case 4: newFollowupDate = calculateDay(14,followupDate);
+                break;
+            case 5: newFollowupDate = calculateDay(14,followupDate);
+                break;
+            case 6: newFollowupDate = calculateDay(21,followupDate);
+                break;
+            case 7: newFollowupDate = calculateDay(30,followupDate);
+                break;
+            case 8: newFollowupDate = calculateDay(30,followupDate);
+                break;
+            case 9: newFollowupDate = calculateDay(60,followupDate);
+                break;
+            case 10: newFollowupDate = calculateDay(90,followupDate);
+                break;
+            default: newFollowupDate = calculateDay(7,followupDate);
+                break;
+
+        }
+
+        return newFollowupDate;
+
+    }
+
+    private String calculateDay(int days,String followupDate) {
+        String newDate = "";
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = df.parse(followupDate);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, days);
+            newDate = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return newDate;
+    }
 }
