@@ -127,4 +127,13 @@ public class DataController {
         }
         return newDate;
     }
+
+
+    public void createNoteForContact(Contact contact, String noteText, String communicationMedium) throws SQLException {
+        String today = getTodayFormated();
+
+        String query = "INSERT INTO NOTE (CREATE_DATE,COMMUNICATION_MEDIUM,CONTACT_ID_NOTE,NOTE_TEXT) VALUES (\""+today+"\",\""+communicationMedium+"\",\""+contact.getID()+"\",\""+noteText+"\")";
+
+        connector.createNoteForContact(query);
+    }
 }

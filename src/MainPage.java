@@ -94,43 +94,54 @@ public class MainPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //Send out queries updating current account, and update counter
-                try {
-                    setFollowupDateforCurrentContact(contactList.get(counter));
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
 
-                counter +=1;
+                if(FU_messageTextArea.getText().length()>500){
+                    FU_alertLabel.setText("Message is "+FU_messageTextArea.getText().length()+". Please limit to 500.");
+                }else {
 
-
-                //If end of list, clear fields and disable button
-                if(contactList.size()==counter){
-
-                    endOfFollowupContacts();
-
-                }else{
-                    if((followupTextAreaLargerThanZero())&&(emailFieldNotBlank())){
-
-                        FU_alertLabel.setText("Messagebox Populdated");
-                        if(contactList.size()==counter){
-                            endOfFollowupContacts();
-
-
-                        }else//if Not end fo list, get next account and populate textfields
-                        {
-                            Contact contact = contactList.get(counter);
-                            setFollupTextFields(contact);
-                        }
-
-
-                    }else{
-                        FU_alertLabel.setText("Messagebox Not Populated");
-
+                    //Send out queries updating current account, and update counter
+                    try {
+                        setFollowupDateforCurrentContact(contactList.get(counter));
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
                     }
+                    //Add note to contact
+                    try {
+                        createNoteForCurrentUser(contactList.get(counter), FU_messageTextArea.getText(), FU_communicationComboBox.getSelectedItem().toString());
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    counter += 1;
+
+
+                    //If end of list, clear fields and disable button
+                    if (contactList.size() == counter) {
+
+                        endOfFollowupContacts();
+
+                    } else {
+                        if ((followupTextAreaLargerThanZero()) && (emailFieldNotBlank())) {
+
+                            FU_alertLabel.setText("Messagebox Populdated");
+                            if (contactList.size() == counter) {
+                                endOfFollowupContacts();
+
+
+                            } else//if Not end fo list, get next account and populate textfields
+                            {
+                                Contact contact = contactList.get(counter);
+                                setFollupTextFields(contact);
+                            }
+
+
+                        } else {
+                            FU_alertLabel.setText("Messagebox Not Populated");
+
+                        }
+                    }
+
                 }
-
-
 
             }
         });
@@ -162,6 +173,11 @@ public class MainPage extends JFrame{
             }
         });
     }
+
+    private void createNoteForCurrentUser(Contact contact, String noteText, String communicationMedium) throws SQLException {
+        controller.createNoteForContact(contact,noteText,communicationMedium);
+    }
+
 
     private void endOfFollowupContacts() {
         clearFollowupFields();
