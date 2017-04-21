@@ -75,5 +75,19 @@ public class MySQLConnector {
 
         statement.executeUpdate(query);
     }
+
+    public ArrayList<Note> getNotes(String query) throws SQLException {
+
+        connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
+        statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ResultSet resultSet = statement.executeQuery(query);
+        return wrapper.getNoteList(resultSet);
+    }
 }
 

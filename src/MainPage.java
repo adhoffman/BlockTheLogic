@@ -1,18 +1,24 @@
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by alexhoffman on 4/12/17.
  */
 public class MainPage extends JFrame{
     private ArrayList<Contact> contactList;
+    private ArrayList<Note> noteList;
 
     private JButton runQueryButton;
     private JTextField firstNameField;
@@ -57,6 +63,7 @@ public class MainPage extends JFrame{
     private JLabel FU_messageLabel;
     private JLabel FU_alertLabel;
     private JScrollPane FU_messageScrollPane;
+    private JTable FU_noteTable;
     private int counter = 0;
 
 
@@ -149,6 +156,8 @@ public class MainPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
+                    noteList = controller.getNotes();
 
                     contactList = controller.getFollowup();
                     clearFollowupFields();

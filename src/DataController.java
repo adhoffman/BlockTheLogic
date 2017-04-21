@@ -1,3 +1,5 @@
+import com.sun.tools.javap.TypeAnnotationWriter;
+
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -135,5 +137,13 @@ public class DataController {
         String query = "INSERT INTO NOTE (CREATE_DATE,COMMUNICATION_MEDIUM,CONTACT_ID_NOTE,NOTE_TEXT) VALUES (\""+today+"\",\""+communicationMedium+"\",\""+contact.getID()+"\",\""+noteText+"\")";
 
         connector.createNoteForContact(query);
+    }
+
+    public ArrayList<Note> getNotes() throws SQLException {
+
+        String query = "SELECT * FROM NOTE";
+
+        return connector.getNotes(query);
+
     }
 }
