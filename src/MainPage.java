@@ -1,19 +1,11 @@
 import javax.swing.*;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Array;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Created by alexhoffman on 4/12/17.
@@ -116,7 +108,9 @@ public class MainPage extends JFrame{
                     }
                     //Add note to contact
                     try {
-                        createNoteForCurrentUser(contactList.get(counter), FU_messageTextArea.getText(), FU_communicationComboBox.getSelectedItem().toString());
+                        if(FU_messageTextArea.getText().length()>0) {
+                            createNoteForCurrentUser(contactList.get(counter), FU_messageTextArea.getText(), FU_communicationComboBox.getSelectedItem().toString());
+                        }
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
@@ -135,6 +129,7 @@ public class MainPage extends JFrame{
                             FU_alertLabel.setText("Messagebox Populdated");
                             if (contactList.size() == counter) {
                                 endOfFollowupContacts();
+                                clearNoteTable();
 
 
                             } else//if Not end fo list, get next account and populate textfields
@@ -174,13 +169,13 @@ public class MainPage extends JFrame{
                     nextButton.setFocusPainted(true);
                     nextButton.setText("Next");
 
-
-
-
                     if(contactList.size()==counter){
                         endOfFollowupContacts();
+                        clearNoteTable();
                     }else
                     {
+                        Contact contact = contactList.get(counter);
+                        setFollupTextFields(contact);
                         populateNoteListTableForContact();
 
                     }
@@ -193,22 +188,27 @@ public class MainPage extends JFrame{
         });
     }
 
+    private void clearNoteTable() {
+        DefaultTableModel tableModel = (DefaultTableModel) FU_noteTable.getModel();
+        if (tableModel.getRowCount() > 0) {
+            for (int i = tableModel.getRowCount() - 1; i > -1; i--) {
+                tableModel.removeRow(i);
+            }
+        }
+
+        FU_noteTable.setModel(tableModel);
+
+    }
+
     private void populateNoteListTableForContact() throws SQLException {
-        Contact contact = contactList.get(counter);
-
-        setFollupTextFields(contact);
-
-
         noteList = controller.getNotes();
-
-
-        DefaultTableModel noteTableModel = populateTableModel(contactList.get(counter));
+        DefaultTableModel noteTableModel = populateNoteTableModel(contactList.get(counter));
         FU_noteTable.setModel(noteTableModel);
 
     }
 
 
-    private DefaultTableModel populateTableModel(Contact contact) {
+    private DefaultTableModel populateNoteTableModel(Contact contact) {
         String col[] = {"Date", "Medium", "Text"};
 
         DefaultTableModel tableModel = new DefaultTableModel(col,0);
@@ -314,5 +314,5 @@ public class MainPage extends JFrame{
         referencesField.setText("");
         emailField.setText("");
     }
-    
+
 }
