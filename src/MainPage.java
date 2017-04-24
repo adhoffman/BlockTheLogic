@@ -22,7 +22,6 @@ public class MainPage extends JFrame{
     private JTabbedPane WorkflowTab;
     private JPanel AddContactTab;
     private JPanel FollowupTab;
-    private JPanel ActiveTab;
     private JPanel PendingDepositTab;
     private JPanel Activetab;
     private JPanel RevisionTab;
@@ -58,6 +57,24 @@ public class MainPage extends JFrame{
     private JLabel FU_alertLabel;
     private JScrollPane FU_messageScrollPane;
     private JTable FU_noteTable;
+    private JPanel ProjectTab;
+    private JButton PA_addProjectButton;
+    private JTextField PA_projectTitleText;
+    private JTextField PA_endDateText;
+    private JTextField PA_startDateText;
+    private JLabel PA_projectTitleLabel;
+    private JComboBox PA_contactCombobox;
+    private JComboBox PA_songCountCombo;
+    private JComboBox PA_serviceTypeCombo;
+    private JTextField PA_totalCost;
+    private JTextField PA_dueDateText;
+    private JLabel PA_contactLabel;
+    private JLabel PA_startDateLabel;
+    private JLabel PA_endDateLabel;
+    private JLabel PA_songCountLabel;
+    private JLabel PA_serviceTypeLabel;
+    private JLabel PA_totalCostLabel;
+    private JLabel PA_dueDateLabel;
     private int counter = 0;
 
 
