@@ -26,4 +26,16 @@ public class Note {
     public String getNoteText() {
         return this.noteText;
     }
+
+    public int getContactID() {
+        return this.contactID;
+    }
+
+    public String getDate() {
+        return this.createDate;
+    }
+
+    public String getContactMedium() {
+        return this.communicationMedium;
+    }
 }

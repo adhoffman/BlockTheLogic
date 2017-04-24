@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.xml.crypto.Data;
 import java.awt.*;
@@ -139,6 +141,12 @@ public class MainPage extends JFrame{
                             {
                                 Contact contact = contactList.get(counter);
                                 setFollupTextFields(contact);
+
+                                try {
+                                    populateNoteListTableForContact();
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
                             }
 
 
@@ -157,7 +165,7 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
 
-                    noteList = controller.getNotes();
+
 
                     contactList = controller.getFollowup();
                     clearFollowupFields();
@@ -167,12 +175,14 @@ public class MainPage extends JFrame{
                     nextButton.setText("Next");
 
 
+
+
                     if(contactList.size()==counter){
                         endOfFollowupContacts();
                     }else
-                    {  Contact contact = contactList.get(counter);
+                    {
+                        populateNoteListTableForContact();
 
-                        setFollupTextFields(contact);
                     }
 
                 } catch (SQLException e1) {
@@ -181,6 +191,39 @@ public class MainPage extends JFrame{
                 counter = 0;
             }
         });
+    }
+
+    private void populateNoteListTableForContact() throws SQLException {
+        Contact contact = contactList.get(counter);
+
+        setFollupTextFields(contact);
+
+
+        noteList = controller.getNotes();
+
+
+        DefaultTableModel noteTableModel = populateTableModel(contactList.get(counter));
+        FU_noteTable.setModel(noteTableModel);
+
+    }
+
+
+    private DefaultTableModel populateTableModel(Contact contact) {
+        String col[] = {"Date", "Medium", "Text"};
+
+        DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+        for(int i = 0; noteList.size()>i;i++){
+
+            if(contact.getID() == noteList.get(i).getContactID()){
+
+                String row[] = {noteList.get(i).getDate(),noteList.get(i).getContactMedium(),noteList.get(i).getNoteText()};
+                tableModel.addRow(row);
+            }
+
+        }
+        return tableModel;
+
     }
 
     private void createNoteForCurrentUser(Contact contact, String noteText, String communicationMedium) throws SQLException {
@@ -271,6 +314,5 @@ public class MainPage extends JFrame{
         referencesField.setText("");
         emailField.setText("");
     }
-
-
+    
 }
