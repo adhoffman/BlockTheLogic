@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,8 +35,8 @@ public class MainPage extends JFrame{
     private JTextField emailField;
     private JTextField websitesField;
     private JTextField referencesField;
-    private JButton nextButton;
-    private JButton grabFollowupContactsButton;
+    private JButton FU_nextButton;
+    private JButton FU_grabFollowupContactsButton;
     private JTextField FU_first;
     private JTextField FU_last;
     private JTextField FU_email;
@@ -91,16 +90,18 @@ public class MainPage extends JFrame{
         setFollowupTextDisable();
         setFU_messageAreasettings();
         populateFU_CommunicationCombobox();
+        disableFollowUpNextButton();
+
+        setupProjectAddComboBoxes();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
 
-
                     controller.addContact(new Contact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
 
-                    clearFields();
+                    clearNewContactFields();
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
@@ -108,7 +109,7 @@ public class MainPage extends JFrame{
             }
         });
 
-        nextButton.addActionListener(new ActionListener() {
+        FU_nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -172,7 +173,7 @@ public class MainPage extends JFrame{
 
             }
         });
-        grabFollowupContactsButton.addActionListener(new ActionListener() {
+        FU_grabFollowupContactsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -182,9 +183,9 @@ public class MainPage extends JFrame{
                     contactList = controller.getFollowup();
                     clearFollowupFields();
 
-                    nextButton.setBorderPainted(true);
-                    nextButton.setFocusPainted(true);
-                    nextButton.setText("Next");
+                    FU_nextButton.setBorderPainted(true);
+                    FU_nextButton.setFocusPainted(true);
+                    FU_nextButton.setText("Next");
 
                     if(contactList.size()==counter){
                         endOfFollowupContacts();
@@ -203,6 +204,93 @@ public class MainPage extends JFrame{
                 counter = 0;
             }
         });
+
+        PA_addProjectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+                try {
+                    controller.addProject(new Project(PA_projectTitleText.getText(),PA_contactCombobox.getSelectedItem().toString(),PA_startDateText.getText(),PA_endDateText.getText(),PA_dueDateText.getText(),PA_songCountCombo.getSelectedItem().toString(),PA_serviceTypeCombo.getSelectedItem().toString(),PA_totalCost.getText()));
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+                resetAddProjectFields();
+
+            }
+        });
+    }
+
+    private void resetAddProjectFields() {
+        PA_projectTitleText.setText("");
+        PA_contactCombobox.setSelectedItem("");
+        PA_startDateText.setText("");
+        PA_endDateText.setText("");
+        PA_dueDateText.setText("");
+        PA_songCountCombo.setSelectedItem("");
+        PA_serviceTypeCombo.setSelectedItem("");
+        PA_totalCost.setText("");
+
+    }
+
+    private void setupProjectAddComboBoxes() throws SQLException {
+
+        setupProjectContactComboBox();
+        setupSongCountComboBox();
+        setupServiceTypeComboBox();
+
+    }
+
+    private void setupServiceTypeComboBox() {
+        PA_serviceTypeCombo.addItem("");
+        PA_serviceTypeCombo.addItem("Tracking");
+        PA_serviceTypeCombo.addItem("Mixing");
+        PA_serviceTypeCombo.addItem("Mastering");
+        PA_serviceTypeCombo.addItem("Tracking, Mixing");
+        PA_serviceTypeCombo.addItem("Tracking, Mastering");
+        PA_serviceTypeCombo.addItem("Mixing, Mastering");
+        PA_serviceTypeCombo.addItem("Tracking, Mixing, Mastering");
+    }
+
+    private void setupSongCountComboBox() {
+        PA_songCountCombo.addItem("");
+        PA_songCountCombo.addItem("1");
+        PA_songCountCombo.addItem("2");
+        PA_songCountCombo.addItem("3");
+        PA_songCountCombo.addItem("4");
+        PA_songCountCombo.addItem("5");
+        PA_songCountCombo.addItem("6");
+        PA_songCountCombo.addItem("7");
+        PA_songCountCombo.addItem("8");
+        PA_songCountCombo.addItem("9");
+        PA_songCountCombo.addItem("10");
+        PA_songCountCombo.addItem("11");
+        PA_songCountCombo.addItem("12");
+        PA_songCountCombo.addItem("13");
+        PA_songCountCombo.addItem("14");
+        PA_songCountCombo.addItem("15");
+        PA_songCountCombo.addItem("16");
+        PA_songCountCombo.addItem("17");
+        PA_songCountCombo.addItem("18");
+        PA_songCountCombo.addItem("19");
+        PA_songCountCombo.addItem("20");
+    }
+
+    private void setupProjectContactComboBox() throws SQLException {
+        ArrayList<Contact> contacts = controller.getContactListbyNameAndEmail();
+
+
+        for(int i =0;contacts.size()>i;i++) {
+            PA_contactCombobox.addItem(contacts.get(i).getEmail());
+        }
+
+    }
+
+    private void disableFollowUpNextButton() {
+        FU_nextButton.setBorderPainted(false);
+        FU_nextButton.setFocusPainted(false);
+        FU_nextButton.setText("");
     }
 
     private void clearNoteTable() {
@@ -250,9 +338,9 @@ public class MainPage extends JFrame{
 
     private void endOfFollowupContacts() {
         clearFollowupFields();
-        nextButton.setBorderPainted(false);
-        nextButton.setFocusPainted(false);
-        nextButton.setText("No More Contacts");
+        FU_nextButton.setBorderPainted(false);
+        FU_nextButton.setFocusPainted(false);
+        FU_nextButton.setText("No More Contacts");
         counter = 0;
     }
 
@@ -322,7 +410,7 @@ public class MainPage extends JFrame{
     }
 
 
-    private void clearFields() {
+    private void clearNewContactFields() {
         firstNameField.setText("");
         lastNameField.setText("");
         artistgroupNameField.setText("");
