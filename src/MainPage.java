@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by alexhoffman on 4/12/17.
@@ -280,12 +281,14 @@ public class MainPage extends JFrame{
     private void setupProjectContactComboBox() throws SQLException {
         ArrayList<Contact> contacts = controller.getContactListbyNameAndEmail();
 
+        Collections.sort(contacts);
 
         for(int i =0;contacts.size()>i;i++) {
             PA_contactCombobox.addItem(contacts.get(i).getEmail());
         }
 
     }
+
 
     private void disableFollowUpNextButton() {
         FU_nextButton.setBorderPainted(false);

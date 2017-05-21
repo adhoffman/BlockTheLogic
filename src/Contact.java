@@ -1,10 +1,11 @@
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by alexhoffman on 4/19/17.
  */
-public class Contact {
+public class Contact implements Comparable<Contact>{
     private int id;
     private String email;
     private String firstName;
@@ -63,6 +64,19 @@ public class Contact {
         this.followupSequence=followup_seq;
     }
 
+    public Contact(int idCONTACT, String email, String first_name, String last_name) {
+        this.id = idCONTACT;
+        this.email = email;
+        this.firstName = first_name;
+        this.lastName = last_name;
+    }
+
+    public Contact(int idCONTACT, String email) {
+        this.id = idCONTACT;
+        this.email = email;
+
+    }
+
     public String getFirstName() {
         return this.firstName;
     }
@@ -102,5 +116,10 @@ public class Contact {
 
     public int getFollowupSequence() {
         return this.followupSequence;
+    }
+
+    @Override
+    public int compareTo(Contact other) {
+        return this.email.compareTo(other.email);
     }
 }

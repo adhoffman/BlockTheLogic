@@ -1,9 +1,5 @@
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.Date;
 
 /**
  * Created by alexhoffman on 1/28/17.
@@ -88,6 +84,48 @@ public class MySQLConnector {
 
         ResultSet resultSet = statement.executeQuery(query);
         return wrapper.getNoteList(resultSet);
+    }
+
+    public ArrayList<Contact> getContactByNameAndEmail(String query) throws SQLException {
+        connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
+        statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ResultSet resultSet = statement.executeQuery(query);
+        return wrapper.getContactListByNameAndEmail(resultSet);
+    }
+
+    public Contact getContactIDByEmail(String query) throws SQLException {
+
+        connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
+        statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ResultSet resultSet = statement.executeQuery(query);
+
+        return wrapper.getContactByEmail(resultSet);
+
+
+    }
+
+    public void addProject(String query) throws SQLException {
+        connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
+        statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        statement.executeUpdate(query);
     }
 }
 

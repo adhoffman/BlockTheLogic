@@ -114,12 +114,12 @@ public class DataController {
 
     }
 
-    private String calculateDay(int days,String followupDate) {
+    private String calculateDay(int days,String startingDate) {
         String newDate = "";
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date date;
         try {
-            date = df.parse(followupDate);
+            date = df.parse(startingDate);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             cal.add(Calendar.DATE, days);
@@ -133,10 +133,16 @@ public class DataController {
 
     public void createNoteForContact(Contact contact, String noteText, String communicationMedium) throws SQLException {
         String today = getTodayFormated();
+        String nextYearToday = yearFromToday();
 
         String query = "INSERT INTO NOTE (CREATE_DATE,COMMUNICATION_MEDIUM,CONTACT_ID_NOTE,NOTE_TEXT) VALUES (\""+today+"\",\""+communicationMedium+"\",\""+contact.getID()+"\",\""+noteText+"\")";
 
         connector.createNoteForContact(query);
+    }
+
+    private String yearFromToday() {
+        String today = getTodayFormated();
+        return calculateDay(365,today);
     }
 
     public ArrayList<Note> getNotes() throws SQLException {
@@ -144,6 +150,33 @@ public class DataController {
         String query = "SELECT * FROM NOTE";
 
         return connector.getNotes(query);
+
+    }
+
+
+    public ArrayList<Contact> getContactListbyNameAndEmail() throws SQLException {
+
+        String query = "SELECT idCONTACT,EMAIL,FIRST_NAME,LAST_NAME FROM CONTACT";
+
+        return connector.getContactByNameAndEmail(query);
+    }
+
+    public void addProject(Project project) throws SQLException {
+
+        Contact projectContact= getContactIDbyEmail(project.getEmail());
+
+        String query = "INSERT INTO PROJECT (PROJECT_TITLE, CONTACT_ID_PROJ, START_DATE, END_DATE, DUE_DATE, SONG_COUNT,SERVICE_TYPE,TOTAL_COST, PROJECT_STATUS) VALUES (\""+project.getTitle()+"\",\""+projectContact.getID()+"\",\""+project.getStartDate()+"\",\""+project.getEndDate()+"\",\""+project.getDueDate()+"\",\""+project.getSongCount()+"\",\""+project.getServiceType()+"\",\""+project.getTotalCost()+"\",\""+ProjectStatus.NEW+"\")";
+
+        connector.addProject(query);
+    }
+
+    private Contact getContactIDbyEmail(String email) throws SQLException {
+
+        String query = "SELECT idCONTACT,EMAIL FROM CONTACT WHERE EMAIL = \""+email+"\"";
+
+        Contact projectContact = connector.getContactIDByEmail(query);
+
+     return projectContact;
 
     }
 }

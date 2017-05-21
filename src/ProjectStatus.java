@@ -1,0 +1,6 @@
+/**
+ * Created by alexhoffman on 4/24/17.
+ */
+public enum ProjectStatus {
+    NEW,PENDING_DEPOSIT,AWAITING_DATE,TRACKING,MIXING,MASTERING,REVISION,PENDING_PAYMENT,COMPLETE,CANCELLED
+}
