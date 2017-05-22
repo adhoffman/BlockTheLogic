@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -13,6 +15,7 @@ import java.util.Collections;
 public class MainPage extends JFrame{
     private ArrayList<Contact> contactList;
     private ArrayList<Note> noteList;
+    private ArrayList<Project> activeProjectList;
 
     private JButton runQueryButton;
     private JTextField firstNameField;
@@ -75,6 +78,8 @@ public class MainPage extends JFrame{
     private JLabel PA_serviceTypeLabel;
     private JLabel PA_totalCostLabel;
     private JLabel PA_dueDateLabel;
+    private JButton AP_getProjectsButton;
+    private JTable AP_projectTable;
     private int counter = 0;
 
 
@@ -221,6 +226,42 @@ public class MainPage extends JFrame{
 
             }
         });
+
+        AP_getProjectsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    activeProjectList = controller.getActiveProjects();
+                    populateActiveProjectsTable();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+
+
+            }
+        });
+    }
+
+    private void populateActiveProjectsTable() {
+
+        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
+
+        DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+        System.out.println("1");
+
+        for(int i = 0;i<activeProjectList.size();i++){
+            Project project = activeProjectList.get(i);
+
+            String row[] = {project.getStatus(),project.getTitle(),project.getEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
+            tableModel.addRow(row);
+
+        }
+
+        AP_projectTable.setModel(tableModel);
+
     }
 
     private void resetAddProjectFields() {
