@@ -483,50 +483,83 @@
                   </component>
                 </children>
               </grid>
-              <grid id="f2246" binding="Activetab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
+              <grid id="f2246" binding="PotentialTab" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="30" left="30" bottom="30" right="30"/>
                 <constraints>
-                  <tabbedpane title="Active"/>
+                  <tabbedpane title="Potential"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
-                <children/>
+                <children>
+                  <component id="65356" class="javax.swing.JButton" binding="PP_getProjectsButton">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Get Potential Projects"/>
+                    </properties>
+                  </component>
+                  <scrollpane id="c0aab">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="45b42" class="javax.swing.JTable" binding="PP_projectTable">
+                        <constraints/>
+                        <properties/>
+                      </component>
+                    </children>
+                  </scrollpane>
+                  <component id="19bc0" class="javax.swing.JButton" binding="PP_closeSelectedProject_Button">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Close Project"/>
+                    </properties>
+                  </component>
+                  <component id="14f43" class="javax.swing.JButton" binding="PP_promoteToPDButton">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Move to Pending Deposit"/>
+                    </properties>
+                  </component>
+                </children>
               </grid>
-              <grid id="97bf6" binding="PendingDepositTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
+              <grid id="1e210" binding="PendingDepositTab" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="30" left="30" bottom="30" right="30"/>
                 <constraints>
                   <tabbedpane title="Pending Deposit"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
-                <children/>
-              </grid>
-              <grid id="ff33b" binding="RevisionTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <tabbedpane title="Revisions"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children/>
-              </grid>
-              <grid id="cf793" binding="PendingPayTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <tabbedpane title="Pending Payment"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children/>
-              </grid>
-              <grid id="a0fe2" binding="CompleteTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <tabbedpane title="Complete"/>
-                </constraints>
-                <properties/>
-                <border type="none"/>
-                <children/>
+                <children>
+                  <component id="77844" class="javax.swing.JButton" binding="PD_getPendDepProjects">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Get Active Projects"/>
+                    </properties>
+                  </component>
+                  <scrollpane id="e57be">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="f7c8e" class="javax.swing.JTable" binding="PD_pendDepProjectTable">
+                        <constraints/>
+                        <properties/>
+                      </component>
+                    </children>
+                  </scrollpane>
+                </children>
               </grid>
             </children>
           </tabbedpane>

@@ -16,9 +16,11 @@ import java.util.Date;
 public class DataController {
 
     private MySQLConnector connector;
+    private String projectQuery;
 
     public DataController(){
         connector = new MySQLConnector();
+        this.projectQuery = "SELECT PROJECT_STATUS, PROJECT_TITLE, SONG_COUNT, SERVICE_TYPE, TOTAL_COST, DUE_DATE, EMAIL FROM PROJECT JOIN CONTACT ON CONTACT_ID_PROJ = idCONTACT";
 
     }
 
@@ -177,6 +179,22 @@ public class DataController {
         Contact projectContact = connector.getContactIDByEmail(query);
 
      return projectContact;
+
+    }
+
+    public ArrayList<Project> getActiveProjects() throws SQLException {
+
+        String query = this.projectQuery+" WHERE PROJECT_STATUS = \"NEW\"";
+
+        return connector.getActiveProjects(query);
+
+    }
+
+    public ArrayList<Project> getPendingDepsitProjects() throws SQLException {
+
+        String query = projectQuery+" WHERE PROJECT_STATUS = \"PENDING_DEPOSIT\"";
+
+        return connector.getPendingDepositProjects(query);
 
     }
 }

@@ -3,7 +3,7 @@
  */
 public class Project {
 
-    private ProjectStatus status;
+    private String status;
     private String projectTitle;
     private String email;
     private String startDate;
@@ -15,7 +15,7 @@ public class Project {
 
 
     public Project(String projectTitle, String email, String startDate, String endDate, String dueDate, String songCount, String serviceType, String totalCost) {
-        this.status = ProjectStatus.NEW;
+        this.status = ProjectStatus.NEW.toString();
         this.projectTitle = projectTitle;
         this.email = email;
         this.startDate = startDate;
@@ -27,13 +27,16 @@ public class Project {
 
     }
 
-    public void Project (){
-
+    public Project(String project_title, String email, String due_date, String song_count, String service_type, String project_status, String total_cost) {
+        this.projectTitle = project_title;
+        this.email = email;
+        this.dueDate = due_date;
+        this.songCount = Integer.parseInt(song_count);
+        this.serviceType = service_type;
+        this.status = project_status;
+        this.totalCost = Double.parseDouble(total_cost);
     }
 
-    public void setStatus(ProjectStatus status) {
-        this.status = status;
-    }
 
     public String getEmail() {
         return email;
@@ -65,5 +68,9 @@ public class Project {
 
     public Double getTotalCost() {
         return totalCost;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

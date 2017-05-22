@@ -76,4 +76,15 @@ public class ResultSetWrapper {
 
     }
 
+    public ArrayList<Project> returnArrayofProjects(ResultSet resultSet) throws SQLException {
+        ArrayList<Project> projectList = new ArrayList<>();
+
+        while(resultSet.next()){
+
+            projectList.add(new Project(resultSet.getString("PROJECT_TITLE"),resultSet.getString("EMAIL"),resultSet.getString("DUE_DATE"), resultSet.getString("SONG_COUNT"),resultSet.getString("SERVICE_TYPE"),resultSet.getString("PROJECT_STATUS"), resultSet.getString("TOTAL_COST")));
+
+        }
+
+        return projectList;
+    }
 }

@@ -1,5 +1,3 @@
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -16,6 +14,7 @@ public class MainPage extends JFrame{
     private ArrayList<Contact> contactList;
     private ArrayList<Note> noteList;
     private ArrayList<Project> activeProjectList;
+    private ArrayList<Project> pendingDepositProjectList;
 
     private JButton runQueryButton;
     private JTextField firstNameField;
@@ -25,11 +24,7 @@ public class MainPage extends JFrame{
     private JTabbedPane WorkflowTab;
     private JPanel AddContactTab;
     private JPanel FollowupTab;
-    private JPanel PendingDepositTab;
-    private JPanel Activetab;
-    private JPanel RevisionTab;
-    private JPanel PendingPayTab;
-    private JPanel CompleteTab;
+    private JPanel PotentialTab;
     private JPanel ClientsTab;
     private JPanel ReportsTab;
     private JButton addProspectButton;
@@ -78,8 +73,13 @@ public class MainPage extends JFrame{
     private JLabel PA_serviceTypeLabel;
     private JLabel PA_totalCostLabel;
     private JLabel PA_dueDateLabel;
-    private JButton AP_getProjectsButton;
-    private JTable AP_projectTable;
+    private JButton PP_getProjectsButton;
+    private JTable PP_projectTable;
+    private JPanel PendingDepositTab;
+    private JButton PD_getPendDepProjects;
+    private JTable PD_pendDepProjectTable;
+    private JButton PP_closeSelectedProject_Button;
+    private JButton PP_promoteToPDButton;
     private int counter = 0;
 
 
@@ -99,6 +99,8 @@ public class MainPage extends JFrame{
         disableFollowUpNextButton();
 
         setupProjectAddComboBoxes();
+
+        setupAutoSortTableHeaders();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
@@ -227,7 +229,7 @@ public class MainPage extends JFrame{
             }
         });
 
-        AP_getProjectsButton.addActionListener(new ActionListener() {
+        PP_getProjectsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -242,6 +244,51 @@ public class MainPage extends JFrame{
 
             }
         });
+
+        PD_getPendDepProjects.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    pendingDepositProjectList = controller.getPendingDepsitProjects();
+                    populatePendingDepositProjectsTable();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        });
+
+        PP_promoteToPDButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+            }
+        });
+    }
+
+    private void setupAutoSortTableHeaders() {
+        PP_projectTable.setAutoCreateRowSorter(true);
+        PD_pendDepProjectTable.setAutoCreateRowSorter(true);
+
+    }
+
+    private void populatePendingDepositProjectsTable() {
+
+        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
+
+        DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+        for(int i = 0;i<pendingDepositProjectList.size();i++){
+            Project project = pendingDepositProjectList.get(i);
+
+            String row[] = {project.getStatus(),project.getTitle(),project.getEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
+            tableModel.addRow(row);
+
+        }
+
+        PD_pendDepProjectTable.setModel(tableModel);
     }
 
     private void populateActiveProjectsTable() {
@@ -249,8 +296,6 @@ public class MainPage extends JFrame{
         String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
 
         DefaultTableModel tableModel = new DefaultTableModel(col,0);
-
-        System.out.println("1");
 
         for(int i = 0;i<activeProjectList.size();i++){
             Project project = activeProjectList.get(i);
@@ -260,7 +305,7 @@ public class MainPage extends JFrame{
 
         }
 
-        AP_projectTable.setModel(tableModel);
+        PP_projectTable.setModel(tableModel);
 
     }
 
