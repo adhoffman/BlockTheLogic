@@ -13,7 +13,7 @@ import java.util.Collections;
 public class MainPage extends JFrame{
     private ArrayList<Contact> contactList;
     private ArrayList<Note> noteList;
-    private ArrayList<Project> activeProjectList;
+    private ArrayList<Project> potentialProjectList;
     private ArrayList<Project> pendingDepositProjectList;
 
     private JButton runQueryButton;
@@ -73,7 +73,7 @@ public class MainPage extends JFrame{
     private JLabel PA_serviceTypeLabel;
     private JLabel PA_totalCostLabel;
     private JLabel PA_dueDateLabel;
-    private JButton PP_getProjectsButton;
+    private JButton PP_getPotentialProjectsButton;
     private JTable PP_projectTable;
     private JPanel PendingDepositTab;
     private JButton PD_getPendDepProjects;
@@ -229,18 +229,12 @@ public class MainPage extends JFrame{
             }
         });
 
-        PP_getProjectsButton.addActionListener(new ActionListener() {
+        PP_getPotentialProjectsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                try {
-                    activeProjectList = controller.getActiveProjects();
-                    populateActiveProjectsTable();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
 
-
+                populatePotentialProjectsTable();
 
             }
         });
@@ -264,8 +258,41 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
 
+                for(int i=0; i< PP_projectTable.getColumnCount();i++) {
+                    //System.out.println(PP_projectTable.getValueAt(PP_projectTable.getSelectedRow(), i));
+
+                    for(int j = 0; j< potentialProjectList.size(); j++){
+                        {
+                            String currentCell = PP_projectTable.getValueAt(PP_projectTable.getSelectedRow(), i).toString();
+                            if (potentialProjectList.get(j).getContactEmail().equals(currentCell)){
+                                System.out.println(currentCell+ "  "+potentialProjectList.get(j).getTitle());
+
+                                try {
+                                    controller.changeProjectToDepositPending(potentialProjectList.get(j), ProjectStatus.PENDING_DEPOSIT);
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+
+                populatePotentialProjectsTable();
+
             }
         });
+    }
+
+    private void populatePotentialProjectsTable() {
+        try {
+            potentialProjectList = controller.getPotentialProjects();
+            populateActiveProjectsTable();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+
     }
 
     private void setupAutoSortTableHeaders() {
@@ -283,7 +310,7 @@ public class MainPage extends JFrame{
         for(int i = 0;i<pendingDepositProjectList.size();i++){
             Project project = pendingDepositProjectList.get(i);
 
-            String row[] = {project.getStatus(),project.getTitle(),project.getEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
+            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
             tableModel.addRow(row);
 
         }
@@ -297,10 +324,10 @@ public class MainPage extends JFrame{
 
         DefaultTableModel tableModel = new DefaultTableModel(col,0);
 
-        for(int i = 0;i<activeProjectList.size();i++){
-            Project project = activeProjectList.get(i);
+        for(int i = 0; i< potentialProjectList.size(); i++){
+            Project project = potentialProjectList.get(i);
 
-            String row[] = {project.getStatus(),project.getTitle(),project.getEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
+            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
             tableModel.addRow(row);
 
         }
@@ -371,6 +398,7 @@ public class MainPage extends JFrame{
 
         for(int i =0;contacts.size()>i;i++) {
             PA_contactCombobox.addItem(contacts.get(i).getEmail());
+
         }
 
     }
