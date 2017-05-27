@@ -268,7 +268,7 @@ public class MainPage extends JFrame{
                                 System.out.println(currentCell+ "  "+potentialProjectList.get(j).getTitle());
 
                                 try {
-                                    controller.changeProjectToDepositPending(potentialProjectList.get(j), ProjectStatus.PENDING_DEPOSIT);
+                                    controller.changeProjectStatus(potentialProjectList.get(j), ProjectStatus.PENDING_DEPOSIT);
                                 } catch (SQLException e1) {
                                     e1.printStackTrace();
                                 }
@@ -279,6 +279,35 @@ public class MainPage extends JFrame{
                     }
                 }
 
+                populatePotentialProjectsTable();
+
+            }
+        });
+
+        PP_closeSelectedProject_Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                for(int i=0; i< PP_projectTable.getColumnCount();i++) {
+
+                    for(int j = 0; j< potentialProjectList.size(); j++){
+                        {
+                            String currentCell = PP_projectTable.getValueAt(PP_projectTable.getSelectedRow(), i).toString();
+                            if (potentialProjectList.get(j).getContactEmail().equals(currentCell)){
+                                System.out.println(currentCell+ "  "+potentialProjectList.get(j).getTitle());
+
+                                try {
+                                    controller.changeProjectStatus(potentialProjectList.get(j), ProjectStatus.CANCELLED);
+
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                            }
+                        }
+
+                    }
+                }
                 populatePotentialProjectsTable();
 
             }
