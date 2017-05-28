@@ -80,6 +80,8 @@ public class MainPage extends JFrame{
     private JTable PD_pendDepProjectTable;
     private JButton PP_closeSelectedProject_Button;
     private JButton PP_promoteToPDButton;
+    private JButton PD_ChangeProjectStatusButton;
+    private JComboBox PD_PromoteStatusOptions;
     private int counter = 0;
 
 
@@ -101,6 +103,7 @@ public class MainPage extends JFrame{
         setupProjectAddComboBoxes();
 
         setupAutoSortTableHeaders();
+        populatePendingDepositComboBox();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
@@ -244,8 +247,7 @@ public class MainPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                 try {
-                    pendingDepositProjectList = controller.getPendingDepsitProjects();
-                    populatePendingDepositProjectsTable();
+                    refreshPendingDepositProjectsAndPopulateWindow();
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
@@ -268,7 +270,7 @@ public class MainPage extends JFrame{
                                 System.out.println(currentCell+ "  "+potentialProjectList.get(j).getTitle());
 
                                 try {
-                                    controller.changeProjectStatus(potentialProjectList.get(j), ProjectStatus.PENDING_DEPOSIT);
+                                    controller.changeProjectStatus(potentialProjectList.get(j), ProjectStatus.PENDING_DEPOSIT.toString());
                                 } catch (SQLException e1) {
                                     e1.printStackTrace();
                                 }
@@ -297,7 +299,7 @@ public class MainPage extends JFrame{
                                 System.out.println(currentCell+ "  "+potentialProjectList.get(j).getTitle());
 
                                 try {
-                                    controller.changeProjectStatus(potentialProjectList.get(j), ProjectStatus.CANCELLED);
+                                    controller.changeProjectStatus(potentialProjectList.get(j), ProjectStatus.CANCELLED.toString());
 
                                 } catch (SQLException e1) {
                                     e1.printStackTrace();
@@ -312,6 +314,56 @@ public class MainPage extends JFrame{
 
             }
         });
+
+        PD_ChangeProjectStatusButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                for(int i=0; i< PD_pendDepProjectTable.getColumnCount();i++) {
+
+                    for(int j = 0; j< pendingDepositProjectList.size(); j++){
+                        {
+                           String currentCell = PD_pendDepProjectTable.getValueAt(PD_pendDepProjectTable.getSelectedRow(), i).toString();
+                            if (pendingDepositProjectList.get(j).getContactEmail().equals(currentCell)){
+                                System.out.println(currentCell+ "  "+pendingDepositProjectList.get(j).getTitle());
+
+                                if(!PD_PromoteStatusOptions.getSelectedItem().equals("")) {
+                                    try {
+                                        controller.changeProjectStatus(pendingDepositProjectList.get(j), PD_PromoteStatusOptions.getSelectedItem().toString());
+
+                                    } catch (SQLException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+                try {
+                    refreshPendingDepositProjectsAndPopulateWindow();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    private void refreshPendingDepositProjectsAndPopulateWindow() throws SQLException {
+        pendingDepositProjectList = controller.getPendingDepsitProjects();
+        populatePendingDepositProjectsTable();
+    }
+
+    private void populatePendingDepositComboBox() {
+
+        PD_PromoteStatusOptions.addItem(ProjectStatus.AWAITING_DATE);
+        PD_PromoteStatusOptions.addItem(ProjectStatus.TRACKING);
+        PD_PromoteStatusOptions.addItem(ProjectStatus.MIXING);
+        PD_PromoteStatusOptions.addItem(ProjectStatus.MASTERING);
+        PD_PromoteStatusOptions.addItem(ProjectStatus.CANCELLED);
+
     }
 
     private void populatePotentialProjectsTable() {
