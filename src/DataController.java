@@ -1,7 +1,3 @@
-import com.sun.tools.javap.TypeAnnotationWriter;
-
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,11 +12,10 @@ import java.util.Date;
 public class DataController {
 
     private MySQLConnector connector;
-    private String projectQuery;
+    private final String projectQuery = "SELECT idPROJECT, PROJECT_STATUS, PROJECT_TITLE, CONTACT_ID_PROJ, SONG_COUNT, SERVICE_TYPE, TOTAL_COST, START_DATE, END_DATE, DUE_DATE, EMAIL, ADJUSTMENT_AMT FROM PROJECT JOIN CONTACT ON CONTACT_ID_PROJ = idCONTACT";;
 
     public DataController(){
         connector = new MySQLConnector();
-        this.projectQuery = "SELECT PROJECT_STATUS, PROJECT_TITLE, SONG_COUNT, SERVICE_TYPE, TOTAL_COST, DUE_DATE, EMAIL FROM PROJECT JOIN CONTACT ON CONTACT_ID_PROJ = idCONTACT";
 
     }
 
@@ -165,7 +160,7 @@ public class DataController {
 
     public void addProject(Project project) throws SQLException {
 
-        Contact projectContact= getContactIDbyEmail(project.getEmail());
+        Contact projectContact= getContactIDbyEmail(project.getContactEmail());
 
         String query = "INSERT INTO PROJECT (PROJECT_TITLE, CONTACT_ID_PROJ, START_DATE, END_DATE, DUE_DATE, SONG_COUNT,SERVICE_TYPE,TOTAL_COST, PROJECT_STATUS) VALUES (\""+project.getTitle()+"\",\""+projectContact.getID()+"\",\""+project.getStartDate()+"\",\""+project.getEndDate()+"\",\""+project.getDueDate()+"\",\""+project.getSongCount()+"\",\""+project.getServiceType()+"\",\""+project.getTotalCost()+"\",\""+ProjectStatus.NEW+"\")";
 
@@ -182,7 +177,7 @@ public class DataController {
 
     }
 
-    public ArrayList<Project> getActiveProjects() throws SQLException {
+    public ArrayList<Project> getPotentialProjects() throws SQLException {
 
         String query = this.projectQuery+" WHERE PROJECT_STATUS = \"NEW\"";
 
@@ -196,5 +191,28 @@ public class DataController {
 
         return connector.getPendingDepositProjects(query);
 
+    }
+
+    public void changeProjectStatus(Project project, String status) throws SQLException {
+
+        String query = "UPDATE PROJECT SET PROJECT_STATUS = \""+status+"\" WHERE idPROJECT = "+project.getID();
+
+        connector.updateProjectStatus(query);
+
+    }
+
+    public ArrayList<Project> getActiveProjects() throws SQLException {
+
+        String query = this.projectQuery+" WHERE PROJECT_STATUS IN (\"MIXING\",\"TRACKING\",\"MASTERING\",\"AWAITING_DATE\")";
+
+        return connector.getActiveProjects(query);
+
+    }
+
+    public ArrayList<Project> getRevisionProjects() throws SQLException {
+
+        String query = this.projectQuery+" WHERE PROJECT_STATUS = \"REVISION\"";
+
+        return connector.getActiveProjects(query);
     }
 }
