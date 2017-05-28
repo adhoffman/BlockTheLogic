@@ -15,6 +15,7 @@ public class MainPage extends JFrame{
     private ArrayList<Note> noteList;
     private ArrayList<Project> potentialProjectList;
     private ArrayList<Project> pendingDepositProjectList;
+    private ArrayList<Project> activeProjectList;
 
     private JButton runQueryButton;
     private JTextField firstNameField;
@@ -79,9 +80,15 @@ public class MainPage extends JFrame{
     private JButton PD_getPendDepProjects;
     private JTable PD_pendDepProjectTable;
     private JButton PP_closeSelectedProject_Button;
-    private JButton PP_promoteToPDButton;
+    private JButton PP_ChangeProjectStatusButton;
     private JButton PD_ChangeProjectStatusButton;
     private JComboBox PD_PromoteStatusOptions;
+    private JComboBox PP_StatusOptions;
+    private JPanel ActiveTab;
+    private JButton AP_refreshButton;
+    private JComboBox AP_StatusOptions;
+    private JButton AP_ChangeProjectStatus;
+    private JTable AP_ActiveTable;
     private int counter = 0;
 
 
@@ -104,6 +111,7 @@ public class MainPage extends JFrame{
 
         setupAutoSortTableHeaders();
         populatePendingDepositComboBox();
+        populatePotentialComboBox();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
@@ -236,7 +244,6 @@ public class MainPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
                 populatePotentialProjectsTable();
 
             }
@@ -255,7 +262,7 @@ public class MainPage extends JFrame{
             }
         });
 
-        PP_promoteToPDButton.addActionListener(new ActionListener() {
+        PP_ChangeProjectStatusButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -270,7 +277,7 @@ public class MainPage extends JFrame{
                                 System.out.println(currentCell+ "  "+potentialProjectList.get(j).getTitle());
 
                                 try {
-                                    controller.changeProjectStatus(potentialProjectList.get(j), ProjectStatus.PENDING_DEPOSIT.toString());
+                                    controller.changeProjectStatus(potentialProjectList.get(j), PP_StatusOptions.getSelectedItem().toString());
                                 } catch (SQLException e1) {
                                     e1.printStackTrace();
                                 }
@@ -286,34 +293,6 @@ public class MainPage extends JFrame{
             }
         });
 
-        PP_closeSelectedProject_Button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                for(int i=0; i< PP_projectTable.getColumnCount();i++) {
-
-                    for(int j = 0; j< potentialProjectList.size(); j++){
-                        {
-                            String currentCell = PP_projectTable.getValueAt(PP_projectTable.getSelectedRow(), i).toString();
-                            if (potentialProjectList.get(j).getContactEmail().equals(currentCell)){
-                                System.out.println(currentCell+ "  "+potentialProjectList.get(j).getTitle());
-
-                                try {
-                                    controller.changeProjectStatus(potentialProjectList.get(j), ProjectStatus.CANCELLED.toString());
-
-                                } catch (SQLException e1) {
-                                    e1.printStackTrace();
-                                }
-
-                            }
-                        }
-
-                    }
-                }
-                populatePotentialProjectsTable();
-
-            }
-        });
 
         PD_ChangeProjectStatusButton.addActionListener(new ActionListener() {
             @Override
@@ -349,6 +328,45 @@ public class MainPage extends JFrame{
 
             }
         });
+
+        AP_refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    refreshAndPopulateActiveProjects();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    private void refreshAndPopulateActiveProjects() throws SQLException {
+        activeProjectList = controller.getActiveProjects();
+
+
+        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
+
+        DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+        for(int i = 0;i<activeProjectList.size();i++){
+            Project project = activeProjectList.get(i);
+
+            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
+            tableModel.addRow(row);
+
+        }
+
+        AP_ActiveTable.setModel(tableModel);
+
+
+    }
+
+    private void populatePotentialComboBox() {
+        PP_StatusOptions.addItem(ProjectStatus.PENDING_DEPOSIT);
+        PP_StatusOptions.addItem(ProjectStatus.CANCELLED);
     }
 
     private void refreshPendingDepositProjectsAndPopulateWindow() throws SQLException {
