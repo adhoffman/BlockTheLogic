@@ -112,6 +112,10 @@ public class MainPage extends JFrame{
         setupAutoSortTableHeaders();
         populatePendingDepositComboBox();
         populatePotentialComboBox();
+        populateActiveComboBox();
+        refreshAndPopulateActiveProjects();
+        refreshPendingDepositProjectsAndPopulateWindow();
+        populatePotentialProjectsTable();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
@@ -341,6 +345,54 @@ public class MainPage extends JFrame{
 
             }
         });
+
+        AP_ChangeProjectStatus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                for(int i=0; i< AP_ActiveTable.getColumnCount();i++) {
+
+                    for(int j = 0; j< activeProjectList.size(); j++){
+                        {
+                            System.out.println(AP_ActiveTable.getValueAt(AP_ActiveTable.getSelectedRow(), i).toString());
+                            String currentCell = AP_ActiveTable.getValueAt(AP_ActiveTable.getSelectedRow(), i).toString();
+                            if (activeProjectList.get(j).getContactEmail().equals(currentCell)){
+                                System.out.println(currentCell+ "  "+activeProjectList.get(j).getTitle());
+
+                                if(!AP_StatusOptions.getSelectedItem().equals("")) {
+                                    try {
+                                        controller.changeProjectStatus(activeProjectList.get(j), AP_StatusOptions.getSelectedItem().toString());
+
+                                    } catch (SQLException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+                try {
+                    refreshAndPopulateActiveProjects();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    private void populateActiveComboBox() {
+
+        AP_StatusOptions.addItem(ProjectStatus.AWAITING_DATE);
+        AP_StatusOptions.addItem(ProjectStatus.TRACKING);
+        AP_StatusOptions.addItem(ProjectStatus.MIXING);
+        AP_StatusOptions.addItem(ProjectStatus.MASTERING);
+        AP_StatusOptions.addItem(ProjectStatus.REVISION);
+        AP_StatusOptions.addItem(ProjectStatus.PENDING_PAYMENT);
+        AP_StatusOptions.addItem(ProjectStatus.COMPLETE);
+        AP_StatusOptions.addItem(ProjectStatus.CANCELLED);
     }
 
     private void refreshAndPopulateActiveProjects() throws SQLException {
