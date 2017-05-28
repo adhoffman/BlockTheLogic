@@ -122,6 +122,7 @@ public class MainPage extends JFrame{
         refreshPendingDepositProjectsAndPopulateWindow();
         populatePotentialProjectsTable();
         poopulateRevisionProjectsTable();
+        populateRevisionCombobox();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
@@ -387,6 +388,50 @@ public class MainPage extends JFrame{
 
             }
         });
+
+        RP_ChangeStatus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                for(int i=0; i< RP_RevisionProjectsTable.getColumnCount();i++) {
+
+                    for(int j = 0; j< revisionProjectsList.size(); j++){
+                        {
+                            String currentCell = RP_RevisionProjectsTable.getValueAt(RP_RevisionProjectsTable.getSelectedRow(), i).toString();
+                            if (revisionProjectsList.get(j).getContactEmail().equals(currentCell)){
+
+                                if(!RP_StatusOptions.getSelectedItem().equals("")) {
+                                    try {
+                                        controller.changeProjectStatus(revisionProjectsList.get(j), RP_StatusOptions.getSelectedItem().toString());
+
+                                    } catch (SQLException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+                try {
+                    poopulateRevisionProjectsTable();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    private void populateRevisionCombobox() {
+        RP_StatusOptions.addItem(ProjectStatus.AWAITING_DATE);
+        RP_StatusOptions.addItem(ProjectStatus.TRACKING);
+        RP_StatusOptions.addItem(ProjectStatus.MIXING);
+        RP_StatusOptions.addItem(ProjectStatus.MASTERING);
+        RP_StatusOptions.addItem(ProjectStatus.PENDING_PAYMENT);
+        RP_StatusOptions.addItem(ProjectStatus.COMPLETE);
+        RP_StatusOptions.addItem(ProjectStatus.CANCELLED);
     }
 
     private void poopulateRevisionProjectsTable() throws SQLException {
