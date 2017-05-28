@@ -16,6 +16,7 @@ public class MainPage extends JFrame{
     private ArrayList<Project> potentialProjectList;
     private ArrayList<Project> pendingDepositProjectList;
     private ArrayList<Project> activeProjectList;
+    private ArrayList<Project> revisionProjectsList;
 
     private JButton runQueryButton;
     private JTextField firstNameField;
@@ -89,6 +90,10 @@ public class MainPage extends JFrame{
     private JComboBox AP_StatusOptions;
     private JButton AP_ChangeProjectStatus;
     private JTable AP_ActiveTable;
+    private JComboBox RP_StatusOptions;
+    private JTable RP_RevisionProjectsTable;
+    private JButton RP_ChangeStatus;
+    private JButton RP_Refresh;
     private int counter = 0;
 
 
@@ -116,6 +121,7 @@ public class MainPage extends JFrame{
         refreshAndPopulateActiveProjects();
         refreshPendingDepositProjectsAndPopulateWindow();
         populatePotentialProjectsTable();
+        poopulateRevisionProjectsTable();
 
         addProspectButton.addActionListener(new ActionListener() {
             @Override
@@ -383,6 +389,26 @@ public class MainPage extends JFrame{
         });
     }
 
+    private void poopulateRevisionProjectsTable() throws SQLException {
+
+        revisionProjectsList = controller.getRevisionProjects();
+
+
+        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
+
+        DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+        for(int i = 0;i<revisionProjectsList.size();i++){
+            Project project = revisionProjectsList.get(i);
+
+            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
+            tableModel.addRow(row);
+
+        }
+
+        RP_RevisionProjectsTable.setModel(tableModel);
+    }
+
     private void populateActiveComboBox() {
 
         AP_StatusOptions.addItem(ProjectStatus.AWAITING_DATE);
@@ -412,7 +438,6 @@ public class MainPage extends JFrame{
         }
 
         AP_ActiveTable.setModel(tableModel);
-
 
     }
 
