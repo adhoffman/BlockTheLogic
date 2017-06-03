@@ -30,7 +30,7 @@ public class MainPage extends JFrame{
     private JPanel PotentialTab;
     private JPanel ClientsTab;
     private JPanel ReportsTab;
-    private JButton addProspectButton;
+    private JButton addContactButton;
     private JTextField facebookNameField;
     private JTextField lastNameField;
     private JTextField artistgroupNameField;
@@ -125,13 +125,13 @@ public class MainPage extends JFrame{
         setupAutoSortTableHeaders();
 
         refreshAllProjectsFromDatabase();
-        populateProjectsTables();
+        populateAllProjectsTables();
         populatProjectStatusOptionsComboBoxes();
 
 
 
 
-        addProspectButton.addActionListener((ActionEvent e) -> {
+        addContactButton.addActionListener((ActionEvent e) -> {
             try {
 
                 controller.addContact(new Contact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
@@ -235,49 +235,64 @@ public class MainPage extends JFrame{
 
         PA_addProjectButton.addActionListener(e -> {
 
-
+            Project newProject = new Project(PA_projectTitleText.getText(),PA_contactCombobox.getSelectedItem().toString(),PA_startDateText.getText(),PA_endDateText.getText(),PA_dueDateText.getText(),PA_songCountCombo.getSelectedItem().toString(),PA_serviceTypeCombo.getSelectedItem().toString(),PA_totalCost.getText());
             try {
-                controller.addProject(new Project(PA_projectTitleText.getText(),PA_contactCombobox.getSelectedItem().toString(),PA_startDateText.getText(),PA_endDateText.getText(),PA_dueDateText.getText(),PA_songCountCombo.getSelectedItem().toString(),PA_serviceTypeCombo.getSelectedItem().toString(),PA_totalCost.getText()));
+                controller.addProject(newProject);
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
 
+            try {
+                potentialProjectList = controller.getPotentialProjects();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             resetAddProjectFields();
+            populateAllProjectsTables();
 
         });
 
+        PP_ChangeProjectStatusButton.addActionListener((ActionEvent e) -> {
 
-        /*
-        PP_ChangeProjectStatusButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            for(int i=0; i< PP_projectTable.getColumnCount();i++) {
 
+                for(int j = 0; j< potentialProjectList.size(); j++){
+                    {
+                        String currentCell = PP_projectTable.getValueAt(PP_projectTable.getSelectedRow(), i).toString();
+                        if (potentialProjectList.get(j).getContactEmail().equals(currentCell)){
 
-                for(int i=0; i< PP_projectTable.getColumnCount();i++) {
-
-                    for(int j = 0; j< potentialProjectList.size(); j++){
-                        {
-                            String currentCell = PP_projectTable.getValueAt(PP_projectTable.getSelectedRow(), i).toString();
-                            if (potentialProjectList.get(j).getContactEmail().equals(currentCell));
-
+                            if(!PP_StatusOptions.getSelectedItem().equals("")) {
                                 try {
                                     controller.changeProjectStatus(potentialProjectList.get(j), PP_StatusOptions.getSelectedItem().toString());
+                                    Project project = potentialProjectList.get(j);
+                                    changeProjectStatus(project, PP_StatusOptions.getSelectedItem().toString());
+
+                                    System.out.println(potentialProjectList.size());
+
+                                    System.out.println(PP_StatusOptions.getSelectedItem().toString()+"  "+ProjectStatus.PENDING_DEPOSIT+"  "+ProjectStatus.PENDING_DEPOSIT.toString());
+
+                                    moveProjectToDifferentList(project, PP_StatusOptions.getSelectedItem().toString());
+                                    potentialProjectList.remove(j);
+
+
                                 } catch (SQLException e1) {
                                     e1.printStackTrace();
                                 }
-
                             }
+
                         }
-
                     }
+
                 }
-
-                populatePotentialProjectsTable();
-
             }
+
+
+
+            populateAllProjectsTables();
         });
 
 
+/*
         PD_ChangeProjectStatusButton.addActionListner(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -386,6 +401,44 @@ public class MainPage extends JFrame{
         */
     }
 
+    private void moveProjectToDifferentList(Project project, String status) {
+
+
+        if(status.equals(ProjectStatus.PENDING_DEPOSIT.toString())){
+            pendingDepositProjectList.add(project);
+        }
+
+        if(status.equals(ProjectStatus.AWAITING_DATE.toString())){
+            activeProjectList.add(project);
+        }
+
+        if(status.equals(ProjectStatus.TRACKING.toString())){
+            activeProjectList.add(project);
+        }
+        if(status.equals(ProjectStatus.MIXING.toString())){
+            activeProjectList.add(project);
+        }
+        if(status.equals(ProjectStatus.MASTERING.toString())){
+            activeProjectList.add(project);
+        }
+        if(status.equals(ProjectStatus.REVISION.toString())){
+            revisionProjectsList.add(project);
+        }
+        if(status.equals(ProjectStatus.PENDING_PAYMENT.toString())){
+            pendingPaymentProjectList.add(project);
+        }
+        if(status.equals(ProjectStatus.COMPLETE.toString())){
+            completeProjectsList.add(project);
+        }
+
+
+    }
+
+    private void changeProjectStatus(Project project, String status) {
+
+        project.changeStatus(status);
+    }
+
     private void refreshAllProjectsFromDatabase() throws SQLException {
 
         potentialProjectList = controller.getPotentialProjects();
@@ -461,7 +514,7 @@ public class MainPage extends JFrame{
         PP_StatusOptions.addItem(ProjectStatus.CANCELLED);
     }
 
-    private void populateProjectsTables() {
+    private void populateAllProjectsTables() {
         populatePotentialProjectsTable();
         populatePendingDepositProjectsTable();
         populateActiveProjectTable();

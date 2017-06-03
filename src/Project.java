@@ -97,4 +97,8 @@ public class Project {
     public int getID() {
         return this.ID;
     }
+
+    public void changeStatus(String status) {
+        this.status = status;
+    }
 }

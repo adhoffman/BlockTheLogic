@@ -79,7 +79,7 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="c037a" class="javax.swing.JButton" binding="addProspectButton" default-binding="true">
+                  <component id="c037a" class="javax.swing.JButton" binding="addContactButton">
                     <constraints>
                       <grid row="7" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -491,14 +491,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="65356" class="javax.swing.JButton" binding="PP_getPotentialProjectsButton">
-                    <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Refresh"/>
-                    </properties>
-                  </component>
                   <scrollpane id="c0aab">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -536,14 +528,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="77844" class="javax.swing.JButton" binding="PD_getPendDepProjects">
-                    <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Refresh"/>
-                    </properties>
-                  </component>
                   <scrollpane id="e57be">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -581,14 +565,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="ef3a7" class="javax.swing.JButton" binding="AP_refreshButton">
-                    <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Refresh"/>
-                    </properties>
-                  </component>
                   <scrollpane id="ba13f">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -626,14 +602,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="3cd10" class="javax.swing.JButton" binding="RP_Refresh">
-                    <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Refresh"/>
-                    </properties>
-                  </component>
                   <scrollpane id="60288">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -671,14 +639,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="331e2" class="javax.swing.JButton" binding="PendP_Refresh">
-                    <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Refresh"/>
-                    </properties>
-                  </component>
                   <scrollpane id="51c87">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -716,14 +676,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="2eedc" class="javax.swing.JButton" binding="CP_Refresh">
-                    <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Refresh"/>
-                    </properties>
-                  </component>
                   <scrollpane id="24f09">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
