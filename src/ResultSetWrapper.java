@@ -81,7 +81,8 @@ public class ResultSetWrapper {
 
         while(resultSet.next()){
 
-            projectList.add(new Project(resultSet.getString("PROJECT_TITLE"),resultSet.getString("EMAIL"),resultSet.getString("DUE_DATE"), resultSet.getString("SONG_COUNT"),resultSet.getString("SERVICE_TYPE"),resultSet.getString("PROJECT_STATUS"), resultSet.getString("TOTAL_COST")));
+            //public Project(String ID, String startDate, String endDate, String contactID, String contactEmail, String projectTitle, String songCount, String serviceType, String totalCost, String projectStatus, String dueDate, String adjustmentAmt ) {
+            projectList.add(new Project(resultSet.getString("idPROJECT"),resultSet.getString("START_DATE"), resultSet.getString("END_DATE"), resultSet.getString("CONTACT_ID_PROJ"), resultSet.getString("EMAIL"),resultSet.getString("PROJECT_TITLE"), resultSet.getString("SONG_COUNT"), resultSet.getString("SERVICE_TYPE"),resultSet.getString("TOTAL_COST"),resultSet.getString("PROJECT_STATUS"),resultSet.getString("DUE_DATE"), resultSet.getString("ADJUSTMENT_AMT")));
 
         }
 

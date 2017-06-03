@@ -215,4 +215,17 @@ public class DataController {
 
         return connector.getActiveProjects(query);
     }
+
+    public ArrayList<Project> getPendingPaymentProjects() throws SQLException {
+
+        String query = this.projectQuery+" WHERE PROJECT_STATUS = \"PENDING_PAYMENT\"";
+
+        return connector.getActiveProjects(query);
+    }
+
+    public ArrayList<Project> getCompleteProjects() throws SQLException {
+        String query = this.projectQuery+" WHERE PROJECT_STATUS = \"COMPLETE\"";
+
+        return connector.getActiveProjects(query);
+    }
 }

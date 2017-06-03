@@ -128,165 +128,142 @@ public class MainPage extends JFrame{
         setupProjectAddComboBoxes();
 
         setupAutoSortTableHeaders();
-        populatePendingDepositComboBox();
-        populatePotentialComboBox();
-        populateActiveComboBox();
+
         refreshAndPopulateActiveProjects();
         refreshPendingDepositProjectsAndPopulateWindow();
         populatePotentialProjectsTable();
         poopulateRevisionProjectsTable();
-        populateRevisionCombobox();
         populatePendingPaymentTable();
         populateCompleteTable();
 
+        populatProjectStatusOptionsComboBoxes();
 
-        addProspectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+
+        addProspectButton.addActionListener((ActionEvent e) -> {
+            try {
+
+                controller.addContact(new Contact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
+
+                clearNewContactFields();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
+        });
+
+        FU_nextButton.addActionListener((ActionEvent e) -> {
+
+
+            if(FU_messageTextArea.getText().length()>500){
+                FU_alertLabel.setText("Message is "+FU_messageTextArea.getText().length()+". Please limit to 500.");
+            }else {
+
+                //Send out queries updating current account, and update counter
                 try {
-
-                    controller.addContact(new Contact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
-
-                    clearNewContactFields();
+                    setFollowupDateforCurrentContact(contactList.get(counter));
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+                //Add note to contact
+                try {
+                    if(FU_messageTextArea.getText().length()>0) {
+                        createNoteForCurrentUser(contactList.get(counter), FU_messageTextArea.getText(), FU_communicationComboBox.getSelectedItem().toString());
+                    }
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
 
-            }
-        });
-
-        FU_nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+                counter += 1;
 
 
-                if(FU_messageTextArea.getText().length()>500){
-                    FU_alertLabel.setText("Message is "+FU_messageTextArea.getText().length()+". Please limit to 500.");
-                }else {
+                //If end of list, clear fields and disable button
+                if (contactList.size() == counter) {
 
-                    //Send out queries updating current account, and update counter
-                    try {
-                        setFollowupDateforCurrentContact(contactList.get(counter));
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
-                    }
-                    //Add note to contact
-                    try {
-                        if(FU_messageTextArea.getText().length()>0) {
-                            createNoteForCurrentUser(contactList.get(counter), FU_messageTextArea.getText(), FU_communicationComboBox.getSelectedItem().toString());
+                    endOfFollowupContacts();
+
+                } else {
+                    if ((followupTextAreaLargerThanZero()) && (emailFieldNotBlank())) {
+
+                        FU_alertLabel.setText("Messagebox Populdated");
+                        if (contactList.size() == counter) {
+                            endOfFollowupContacts();
+                            clearNoteTable();
+
+
+                        } else//if Not end fo list, get next account and populate textfields
+                        {
+                            Contact contact = contactList.get(counter);
+                            setFollupTextFields(contact);
+
+                            try {
+                                populateNoteListTableForContact();
+                            } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            }
                         }
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
-                    }
 
-                    counter += 1;
-
-
-                    //If end of list, clear fields and disable button
-                    if (contactList.size() == counter) {
-
-                        endOfFollowupContacts();
 
                     } else {
-                        if ((followupTextAreaLargerThanZero()) && (emailFieldNotBlank())) {
-
-                            FU_alertLabel.setText("Messagebox Populdated");
-                            if (contactList.size() == counter) {
-                                endOfFollowupContacts();
-                                clearNoteTable();
-
-
-                            } else//if Not end fo list, get next account and populate textfields
-                            {
-                                Contact contact = contactList.get(counter);
-                                setFollupTextFields(contact);
-
-                                try {
-                                    populateNoteListTableForContact();
-                                } catch (SQLException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-
-
-                        } else {
-                            FU_alertLabel.setText("Messagebox Not Populated");
-
-                        }
-                    }
-
-                }
-
-            }
-        });
-        FU_grabFollowupContactsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-
-
-
-                    contactList = controller.getFollowup();
-                    clearFollowupFields();
-
-                    FU_nextButton.setBorderPainted(true);
-                    FU_nextButton.setFocusPainted(true);
-                    FU_nextButton.setText("Next");
-
-                    if(contactList.size()==counter){
-                        endOfFollowupContacts();
-                        clearNoteTable();
-                    }else
-                    {
-                        Contact contact = contactList.get(counter);
-                        setFollupTextFields(contact);
-                        populateNoteListTableForContact();
+                        FU_alertLabel.setText("Messagebox Not Populated");
 
                     }
-
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-                counter = 0;
-            }
-        });
-
-        PA_addProjectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-
-                try {
-                    controller.addProject(new Project(PA_projectTitleText.getText(),PA_contactCombobox.getSelectedItem().toString(),PA_startDateText.getText(),PA_endDateText.getText(),PA_dueDateText.getText(),PA_songCountCombo.getSelectedItem().toString(),PA_serviceTypeCombo.getSelectedItem().toString(),PA_totalCost.getText()));
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-
-                resetAddProjectFields();
-
-            }
-        });
-
-        PP_getPotentialProjectsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                populatePotentialProjectsTable();
-
-            }
-        });
-
-        PD_getPendDepProjects.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                try {
-                    refreshPendingDepositProjectsAndPopulateWindow();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
                 }
 
             }
+
+        });
+        FU_grabFollowupContactsButton.addActionListener((ActionEvent e) -> {
+            try {
+
+
+
+                contactList = controller.getFollowup();
+                clearFollowupFields();
+
+                FU_nextButton.setBorderPainted(true);
+                FU_nextButton.setFocusPainted(true);
+                FU_nextButton.setText("Next");
+
+                if(contactList.size()==counter){
+                    endOfFollowupContacts();
+                    clearNoteTable();
+                }else
+                {
+                    Contact contact = contactList.get(counter);
+                    setFollupTextFields(contact);
+                    populateNoteListTableForContact();
+
+                }
+
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            counter = 0;
+        });
+
+        PA_addProjectButton.addActionListener(e -> {
+
+
+            try {
+                controller.addProject(new Project(PA_projectTitleText.getText(),PA_contactCombobox.getSelectedItem().toString(),PA_startDateText.getText(),PA_endDateText.getText(),PA_dueDateText.getText(),PA_songCountCombo.getSelectedItem().toString(),PA_serviceTypeCombo.getSelectedItem().toString(),PA_totalCost.getText()));
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
+            resetAddProjectFields();
+
+        });
+
+        PP_getPotentialProjectsButton.addActionListener((ActionEvent e) -> populatePotentialProjectsTable());
+
+        PD_getPendDepProjects.addActionListener((ActionEvent e) -> {
+
+            try {
+                refreshPendingDepositProjectsAndPopulateWindow();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
         });
 
         /*
@@ -355,18 +332,6 @@ public class MainPage extends JFrame{
     });
 
 
-        AP_refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                try {
-                    refreshAndPopulateActiveProjects();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
-
-            }
-        });
 
         AP_ChangeProjectStatus.addActionListener(new ActionListener() {
             @Override
@@ -440,6 +405,73 @@ public class MainPage extends JFrame{
         */
     }
 
+
+    private void populatProjectStatusOptionsComboBoxes() {
+
+        populatePotentialStatusComboBox();
+        populatePendingDepositStatusComboBox();
+        populateActiveStatusComboBox();
+        populateRevisionStatusCombobox();
+        populatePendingPaymentStatusCombobox();
+        populateCompleteStatusCombobox();
+
+
+    }
+    private void populatePendingDepositStatusComboBox() {
+
+        PD_PromoteStatusOptions.addItem(ProjectStatus.AWAITING_DATE);
+        PD_PromoteStatusOptions.addItem(ProjectStatus.TRACKING);
+        PD_PromoteStatusOptions.addItem(ProjectStatus.MIXING);
+        PD_PromoteStatusOptions.addItem(ProjectStatus.MASTERING);
+        PD_PromoteStatusOptions.addItem(ProjectStatus.CANCELLED);
+
+    }
+
+
+    private void populateCompleteStatusCombobox() {
+        CP_StatusOptions.addItem(ProjectStatus.ARCHIVE);
+        CP_StatusOptions.addItem(ProjectStatus.PENDING_PAYMENT);
+        CP_StatusOptions.addItem(ProjectStatus.REVISION);
+        CP_StatusOptions.addItem(ProjectStatus.CANCELLED);
+
+    }
+
+    private void populatePendingPaymentStatusCombobox() {
+        PendP_StatusOptions.addItem(ProjectStatus.COMPLETE);
+        PendP_StatusOptions.addItem(ProjectStatus.REVISION);
+        PendP_StatusOptions.addItem(ProjectStatus.CANCELLED);
+
+    }
+
+    private void populateRevisionStatusCombobox() {
+        RP_StatusOptions.addItem(ProjectStatus.AWAITING_DATE);
+        RP_StatusOptions.addItem(ProjectStatus.TRACKING);
+        RP_StatusOptions.addItem(ProjectStatus.MIXING);
+        RP_StatusOptions.addItem(ProjectStatus.MASTERING);
+        RP_StatusOptions.addItem(ProjectStatus.PENDING_PAYMENT);
+        RP_StatusOptions.addItem(ProjectStatus.COMPLETE);
+        RP_StatusOptions.addItem(ProjectStatus.CANCELLED);
+    }
+
+    private void populateActiveStatusComboBox() {
+
+        AP_StatusOptions.addItem(ProjectStatus.AWAITING_DATE);
+        AP_StatusOptions.addItem(ProjectStatus.TRACKING);
+        AP_StatusOptions.addItem(ProjectStatus.MIXING);
+        AP_StatusOptions.addItem(ProjectStatus.MASTERING);
+        AP_StatusOptions.addItem(ProjectStatus.REVISION);
+        AP_StatusOptions.addItem(ProjectStatus.PENDING_PAYMENT);
+        AP_StatusOptions.addItem(ProjectStatus.COMPLETE);
+        AP_StatusOptions.addItem(ProjectStatus.CANCELLED);
+    }
+
+    private void populatePotentialStatusComboBox() {
+        PP_StatusOptions.addItem(ProjectStatus.PENDING_DEPOSIT);
+        PP_StatusOptions.addItem(ProjectStatus.CANCELLED);
+    }
+
+
+
     private void populateCompleteTable() throws SQLException {
         completeProjectsList = controller.getCompleteProjects();
 
@@ -479,15 +511,7 @@ public class MainPage extends JFrame{
         PendP_PendingPaymentTable.setModel(tableModel);
     }
 
-    private void populateRevisionCombobox() {
-        RP_StatusOptions.addItem(ProjectStatus.AWAITING_DATE);
-        RP_StatusOptions.addItem(ProjectStatus.TRACKING);
-        RP_StatusOptions.addItem(ProjectStatus.MIXING);
-        RP_StatusOptions.addItem(ProjectStatus.MASTERING);
-        RP_StatusOptions.addItem(ProjectStatus.PENDING_PAYMENT);
-        RP_StatusOptions.addItem(ProjectStatus.COMPLETE);
-        RP_StatusOptions.addItem(ProjectStatus.CANCELLED);
-    }
+
 
     private void poopulateRevisionProjectsTable() throws SQLException {
 
@@ -509,17 +533,6 @@ public class MainPage extends JFrame{
         RP_RevisionProjectsTable.setModel(tableModel);
     }
 
-    private void populateActiveComboBox() {
-
-        AP_StatusOptions.addItem(ProjectStatus.AWAITING_DATE);
-        AP_StatusOptions.addItem(ProjectStatus.TRACKING);
-        AP_StatusOptions.addItem(ProjectStatus.MIXING);
-        AP_StatusOptions.addItem(ProjectStatus.MASTERING);
-        AP_StatusOptions.addItem(ProjectStatus.REVISION);
-        AP_StatusOptions.addItem(ProjectStatus.PENDING_PAYMENT);
-        AP_StatusOptions.addItem(ProjectStatus.COMPLETE);
-        AP_StatusOptions.addItem(ProjectStatus.CANCELLED);
-    }
 
     private void refreshAndPopulateActiveProjects() throws SQLException {
         activeProjectList = controller.getActiveProjects();
@@ -541,25 +554,12 @@ public class MainPage extends JFrame{
 
     }
 
-    private void populatePotentialComboBox() {
-        PP_StatusOptions.addItem(ProjectStatus.PENDING_DEPOSIT);
-        PP_StatusOptions.addItem(ProjectStatus.CANCELLED);
-    }
 
     private void refreshPendingDepositProjectsAndPopulateWindow() throws SQLException {
         pendingDepositProjectList = controller.getPendingDepsitProjects();
         populatePendingDepositProjectsTable();
     }
 
-    private void populatePendingDepositComboBox() {
-
-        PD_PromoteStatusOptions.addItem(ProjectStatus.AWAITING_DATE);
-        PD_PromoteStatusOptions.addItem(ProjectStatus.TRACKING);
-        PD_PromoteStatusOptions.addItem(ProjectStatus.MIXING);
-        PD_PromoteStatusOptions.addItem(ProjectStatus.MASTERING);
-        PD_PromoteStatusOptions.addItem(ProjectStatus.CANCELLED);
-
-    }
 
     private void populatePotentialProjectsTable() {
         try {
@@ -665,6 +665,7 @@ public class MainPage extends JFrame{
         PA_songCountCombo.addItem("18");
         PA_songCountCombo.addItem("19");
         PA_songCountCombo.addItem("20");
+        PA_songCountCombo.addItem("20+");
     }
 
     private void setupProjectContactComboBox() throws SQLException {

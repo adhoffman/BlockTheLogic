@@ -156,5 +156,17 @@ public class MySQLConnector {
 
         return wrapper.returnArrayofProjects(resultSet);
     }
+
+    public void updateProjectStatus(String query) throws SQLException {
+        connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
+        statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+         statement.executeUpdate(query);
+    }
 }
 
