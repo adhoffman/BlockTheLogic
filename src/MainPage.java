@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,22 +87,18 @@ public class MainPage extends JFrame{
     private JComboBox PD_PromoteStatusOptions;
     private JComboBox PP_StatusOptions;
     private JPanel ActiveTab;
-    private JButton AP_refreshButton;
     private JComboBox AP_StatusOptions;
     private JButton AP_ChangeProjectStatus;
     private JTable AP_ActiveTable;
     private JComboBox RP_StatusOptions;
     private JTable RP_RevisionProjectsTable;
     private JButton RP_ChangeStatus;
-    private JButton RP_Refresh;
     private JPanel RevisionTab;
     private JPanel PendingPaymentTab;
-    private JButton PendP_Refresh;
     private JTable PendP_PendingPaymentTable;
     private JButton PendP_ChangeStatusButton;
     private JComboBox PendP_StatusOptions;
     private JPanel CompleteTab;
-    private JButton CP_Refresh;
     private JTable CP_CompleteTable;
     private JButton CP_ChangeStatus;
     private JComboBox CP_StatusOptions;
@@ -129,14 +124,10 @@ public class MainPage extends JFrame{
 
         setupAutoSortTableHeaders();
 
-        refreshAndPopulateActiveProjects();
-        refreshPendingDepositProjectsAndPopulateWindow();
-        populatePotentialProjectsTable();
-        poopulateRevisionProjectsTable();
-        populatePendingPaymentTable();
-        populateCompleteTable();
 
         populatProjectStatusOptionsComboBoxes();
+
+        populateProjectsTables();
 
 
         addProspectButton.addActionListener((ActionEvent e) -> {
@@ -254,17 +245,6 @@ public class MainPage extends JFrame{
 
         });
 
-        PP_getPotentialProjectsButton.addActionListener((ActionEvent e) -> populatePotentialProjectsTable());
-
-        PD_getPendDepProjects.addActionListener((ActionEvent e) -> {
-
-            try {
-                refreshPendingDepositProjectsAndPopulateWindow();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-
-        });
 
         /*
         PP_ChangeProjectStatusButton.addActionListener(new ActionListener() {
@@ -406,6 +386,7 @@ public class MainPage extends JFrame{
     }
 
 
+
     private void populatProjectStatusOptionsComboBoxes() {
 
         populatePotentialStatusComboBox();
@@ -470,145 +451,76 @@ public class MainPage extends JFrame{
         PP_StatusOptions.addItem(ProjectStatus.CANCELLED);
     }
 
+    private void populateProjectsTables() throws SQLException {
+        populatePotentialProjectsTable();
+        populatePendingDepositProjectsTable();
+        populateActiveProjectTable();
+        poopulateRevisionProjectsTable();
+        populatePendingPaymentTable();
+        populateCompleteTable();
+
+    }
+
+
+    private void populatePendingDepositProjectsTable() throws SQLException {
+        pendingDepositProjectList = controller.getPendingDepsitProjects();
+        PD_pendDepProjectTable.setModel(populateProjectTable(pendingDepositProjectList));
+    }
+
+
+    private void populatePotentialProjectsTable() throws SQLException {
+
+        potentialProjectList = controller.getPotentialProjects();
+        PP_projectTable.setModel(populateProjectTable(potentialProjectList));
+
+    }
+
+    private void populateActiveProjectTable() throws SQLException {
+        activeProjectList = controller.getActiveProjects();
+        AP_ActiveTable.setModel(populateProjectTable(activeProjectList));
+    }
 
 
     private void populateCompleteTable() throws SQLException {
         completeProjectsList = controller.getCompleteProjects();
-
-
-        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
-
-        DefaultTableModel tableModel = new DefaultTableModel(col,0);
-
-        for(int i = 0;i<completeProjectsList.size();i++){
-            Project project = completeProjectsList.get(i);
-
-            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
-            tableModel.addRow(row);
-
-        }
-
-        CP_CompleteTable.setModel(tableModel);
+        CP_CompleteTable.setModel(populateProjectTable(completeProjectsList));
     }
 
     private void populatePendingPaymentTable() throws SQLException {
 
         pendingPaymentProjectList = controller.getPendingPaymentProjects();
-
-
-        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
-
-        DefaultTableModel tableModel = new DefaultTableModel(col,0);
-
-        for(int i = 0;i<pendingPaymentProjectList.size();i++){
-            Project project = pendingPaymentProjectList.get(i);
-
-            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
-            tableModel.addRow(row);
-
-        }
-
-        PendP_PendingPaymentTable.setModel(tableModel);
+        PendP_PendingPaymentTable.setModel(populateProjectTable(pendingPaymentProjectList));
     }
-
 
 
     private void poopulateRevisionProjectsTable() throws SQLException {
 
         revisionProjectsList = controller.getRevisionProjects();
+        RP_RevisionProjectsTable.setModel(populateProjectTable(revisionProjectsList));
+    }
+
+    private DefaultTableModel populateProjectTable(ArrayList<Project> list) throws SQLException {
 
 
         String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
 
         DefaultTableModel tableModel = new DefaultTableModel(col,0);
 
-        for(int i = 0;i<revisionProjectsList.size();i++){
-            Project project = revisionProjectsList.get(i);
+        for(int i = 0;i<list.size();i++){
+            Project project = list.get(i);
 
             String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
             tableModel.addRow(row);
 
         }
 
-        RP_RevisionProjectsTable.setModel(tableModel);
+        return tableModel;
     }
 
-
-    private void refreshAndPopulateActiveProjects() throws SQLException {
-        activeProjectList = controller.getActiveProjects();
-
-
-        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
-
-        DefaultTableModel tableModel = new DefaultTableModel(col,0);
-
-        for(int i = 0;i<activeProjectList.size();i++){
-            Project project = activeProjectList.get(i);
-
-            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
-            tableModel.addRow(row);
-
-        }
-
-        AP_ActiveTable.setModel(tableModel);
-
-    }
-
-
-    private void refreshPendingDepositProjectsAndPopulateWindow() throws SQLException {
-        pendingDepositProjectList = controller.getPendingDepsitProjects();
-        populatePendingDepositProjectsTable();
-    }
-
-
-    private void populatePotentialProjectsTable() {
-        try {
-            potentialProjectList = controller.getPotentialProjects();
-            populateActiveProjectsTable();
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-
-    }
 
     private void setupAutoSortTableHeaders() {
         PP_projectTable.setAutoCreateRowSorter(true);
         PD_pendDepProjectTable.setAutoCreateRowSorter(true);
-
-    }
-
-    private void populatePendingDepositProjectsTable() {
-
-        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
-
-        DefaultTableModel tableModel = new DefaultTableModel(col,0);
-
-        for(int i = 0;i<pendingDepositProjectList.size();i++){
-            Project project = pendingDepositProjectList.get(i);
-
-            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
-            tableModel.addRow(row);
-
-        }
-
-        PD_pendDepProjectTable.setModel(tableModel);
-    }
-
-    private void populateActiveProjectsTable() {
-
-        String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
-
-        DefaultTableModel tableModel = new DefaultTableModel(col,0);
-
-        for(int i = 0; i< potentialProjectList.size(); i++){
-            Project project = potentialProjectList.get(i);
-
-            String row[] = {project.getStatus(),project.getTitle(),project.getContactEmail(), project.getServiceType(), Integer.toString(project.getSongCount()),project.getDueDate(),project.getTotalCost().toString()};
-            tableModel.addRow(row);
-
-        }
-
-        PP_projectTable.setModel(tableModel);
 
     }
 
@@ -679,7 +591,6 @@ public class MainPage extends JFrame{
         }
 
     }
-
 
     private void disableFollowUpNextButton() {
         FU_nextButton.setBorderPainted(false);
