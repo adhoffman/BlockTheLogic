@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -267,10 +268,6 @@ public class MainPage extends JFrame{
                                     Project project = potentialProjectList.get(j);
                                     changeProjectStatus(project, PP_StatusOptions.getSelectedItem().toString());
 
-                                    System.out.println(potentialProjectList.size());
-
-                                    System.out.println(PP_StatusOptions.getSelectedItem().toString()+"  "+ProjectStatus.PENDING_DEPOSIT+"  "+ProjectStatus.PENDING_DEPOSIT.toString());
-
                                     moveProjectToDifferentList(project, PP_StatusOptions.getSelectedItem().toString());
                                     potentialProjectList.remove(j);
 
@@ -286,13 +283,45 @@ public class MainPage extends JFrame{
                 }
             }
 
+            populateAllProjectsTables();
+        });
 
+
+        PD_ChangeProjectStatusButton.addActionListener((ActionEvent e) -> {
+
+            for(int i=0; i< PD_pendDepProjectTable.getColumnCount();i++) {
+
+                for(int j = 0; j< pendingDepositProjectList.size(); j++){
+                    {
+                        String currentCell = PD_pendDepProjectTable.getValueAt(PD_pendDepProjectTable.getSelectedRow(), i).toString();
+                        if (pendingDepositProjectList.get(j).getContactEmail().equals(currentCell)){
+
+                            if(!PD_PromoteStatusOptions.getSelectedItem().equals("")) {
+                                try {
+                                    controller.changeProjectStatus(pendingDepositProjectList.get(j), PD_PromoteStatusOptions.getSelectedItem().toString());
+
+                                    Project project = pendingDepositProjectList.get(j);
+                                    changeProjectStatus(project, PD_PromoteStatusOptions.getSelectedItem().toString());
+
+                                    moveProjectToDifferentList(project, PD_PromoteStatusOptions.getSelectedItem().toString());
+                                    pendingDepositProjectList.remove(j);
+
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+            }
 
             populateAllProjectsTables();
         });
 
 
-/*
+        /*
         PD_ChangeProjectStatusButton.addActionListner(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
