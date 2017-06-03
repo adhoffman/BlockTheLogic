@@ -124,10 +124,11 @@ public class MainPage extends JFrame{
 
         setupAutoSortTableHeaders();
 
-
+        refreshAllProjectsFromDatabase();
+        populateProjectsTables();
         populatProjectStatusOptionsComboBoxes();
 
-        populateProjectsTables();
+
 
 
         addProspectButton.addActionListener((ActionEvent e) -> {
@@ -385,6 +386,15 @@ public class MainPage extends JFrame{
         */
     }
 
+    private void refreshAllProjectsFromDatabase() throws SQLException {
+
+        potentialProjectList = controller.getPotentialProjects();
+        pendingDepositProjectList = controller.getPendingDepsitProjects();
+        activeProjectList = controller.getActiveProjects();
+        revisionProjectsList = controller.getRevisionProjects();
+        pendingPaymentProjectList = controller.getPendingPaymentProjects();
+        completeProjectsList = controller.getCompleteProjects();
+    }
 
 
     private void populatProjectStatusOptionsComboBoxes() {
@@ -451,7 +461,7 @@ public class MainPage extends JFrame{
         PP_StatusOptions.addItem(ProjectStatus.CANCELLED);
     }
 
-    private void populateProjectsTables() throws SQLException {
+    private void populateProjectsTables() {
         populatePotentialProjectsTable();
         populatePendingDepositProjectsTable();
         populateActiveProjectTable();
@@ -462,44 +472,38 @@ public class MainPage extends JFrame{
     }
 
 
-    private void populatePendingDepositProjectsTable() throws SQLException {
-        pendingDepositProjectList = controller.getPendingDepsitProjects();
+    private void populatePendingDepositProjectsTable(){
         PD_pendDepProjectTable.setModel(populateProjectTable(pendingDepositProjectList));
     }
 
 
-    private void populatePotentialProjectsTable() throws SQLException {
+    private void populatePotentialProjectsTable() {
 
-        potentialProjectList = controller.getPotentialProjects();
         PP_projectTable.setModel(populateProjectTable(potentialProjectList));
 
     }
 
-    private void populateActiveProjectTable() throws SQLException {
-        activeProjectList = controller.getActiveProjects();
+    private void populateActiveProjectTable(){
         AP_ActiveTable.setModel(populateProjectTable(activeProjectList));
     }
 
 
-    private void populateCompleteTable() throws SQLException {
-        completeProjectsList = controller.getCompleteProjects();
+    private void populateCompleteTable() {
         CP_CompleteTable.setModel(populateProjectTable(completeProjectsList));
     }
 
-    private void populatePendingPaymentTable() throws SQLException {
+    private void populatePendingPaymentTable(){
 
-        pendingPaymentProjectList = controller.getPendingPaymentProjects();
         PendP_PendingPaymentTable.setModel(populateProjectTable(pendingPaymentProjectList));
     }
 
 
-    private void poopulateRevisionProjectsTable() throws SQLException {
+    private void poopulateRevisionProjectsTable() {
 
-        revisionProjectsList = controller.getRevisionProjects();
         RP_RevisionProjectsTable.setModel(populateProjectTable(revisionProjectsList));
     }
 
-    private DefaultTableModel populateProjectTable(ArrayList<Project> list) throws SQLException {
+    private DefaultTableModel populateProjectTable(ArrayList<Project> list){
 
 
         String col[] = {"Status","Title","Email","Services","Song Count","Due Date","Total Cost"};
@@ -546,6 +550,7 @@ public class MainPage extends JFrame{
 
     private void setupServiceTypeComboBox() {
         PA_serviceTypeCombo.addItem("");
+        //Add Editing as Selectable Item
         PA_serviceTypeCombo.addItem("Tracking");
         PA_serviceTypeCombo.addItem("Mixing");
         PA_serviceTypeCombo.addItem("Mastering");
