@@ -10,7 +10,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <tabbedpane id="f122f" binding="tabbedPane1" default-binding="true">
+      <tabbedpane id="f122f" binding="MenuTab">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="200" height="200"/>
@@ -19,9 +19,9 @@
         <properties/>
         <border type="none"/>
         <children>
-          <tabbedpane id="7da0b" binding="WorkflowTab">
+          <tabbedpane id="7da0b" binding="ProjectTab">
             <constraints>
-              <tabbedpane title="Workflow"/>
+              <tabbedpane title="Projects"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -343,7 +343,7 @@
                   </scrollpane>
                 </children>
               </grid>
-              <grid id="a240d" binding="ProjectTab" layout-manager="GridLayoutManager" row-count="9" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="a240d" binding="PotentialProjectTab" layout-manager="GridLayoutManager" row-count="9" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="150" left="150" bottom="150" right="150"/>
                 <constraints>
                   <tabbedpane title="Add Project"/>
@@ -572,7 +572,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="f7faa" class="javax.swing.JTable" binding="AP_ActiveTable">
+                      <component id="b137b" class="javax.swing.JTable" binding="AP_ActiveTable">
                         <constraints/>
                         <properties/>
                       </component>
