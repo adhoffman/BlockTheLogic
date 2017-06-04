@@ -437,6 +437,40 @@ public class MainPage extends JFrame{
 
         });
 
+        CP_ChangeStatus.addActionListener((ActionEvent e) -> {
+
+            for(int i=0; i< CP_CompleteTable.getColumnCount();i++) {
+
+                for(int j = 0; j< completeProjectsList.size(); j++){
+                    {
+                        String currentCell = CP_CompleteTable.getValueAt(CP_CompleteTable.getSelectedRow(), i).toString();
+                        if (completeProjectsList.get(j).getContactEmail().equals(currentCell)){
+
+                            if(!CP_StatusOptions.getSelectedItem().equals("")) {
+
+                                try {
+                                    controller.changeProjectStatus(completeProjectsList.get(j), CP_StatusOptions.getSelectedItem().toString());
+
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                                Project project = completeProjectsList.get(j);
+                                changeProjectStatus(project, CP_StatusOptions.getSelectedItem().toString());
+                                moveProjectToDifferentList(project, CP_StatusOptions.getSelectedItem().toString());
+                                completeProjectsList.remove(j);
+
+                            }
+
+                        }
+                    }
+
+                }
+            }
+
+            populateAllProjectsTables();
+
+        });
 
     }
 
