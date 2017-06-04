@@ -135,19 +135,29 @@ public class MainPage extends JFrame{
 
 
         addContactButton.addActionListener((ActionEvent e) -> {
-            try {
 
-                controller.addContact(new Contact(firstNameField.getText(),lastNameField.getText(),artistgroupNameField.getText(),emailField.getText(),facebookNameField.getText(),websitesField.getText(), referencesField.getText()));
+            if(contactEmailExists()){
 
-                clearNewContactFields();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+                JOptionPane.showMessageDialog(this,
+                        "Cannot create. Contact with email "+emailField.getText().toString()+" already exists.",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
 
-            try {
-                populateProjectContactComboBox();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
+            }else {
+                try {
+
+                    controller.addContact(new Contact(firstNameField.getText(), lastNameField.getText(), artistgroupNameField.getText(), emailField.getText(), facebookNameField.getText(), websitesField.getText(), referencesField.getText()));
+
+                    clearNewContactFields();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+                try {
+                    populateProjectContactComboBox();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
             }
 
         });
@@ -478,6 +488,17 @@ public class MainPage extends JFrame{
 
         });
 
+    }
+
+    private boolean contactEmailExists() {
+
+        for(int i=0;i<allContactsList.size();i++){
+
+            if(allContactsList.get(i).getEmail().equalsIgnoreCase(emailField.getText())){
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean moveProjectOutOfActiveList(String status) {
