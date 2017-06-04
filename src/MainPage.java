@@ -22,23 +22,13 @@ public class MainPage extends JFrame{
 
 
     private JButton runQueryButton;
-    private JTextField firstNameField;
     private DataController controller;
     private JPanel rootPane;
-    private JTabbedPane tabbedPane1;
-    private JTabbedPane WorkflowTab;
-    private JPanel AddContactTab;
+    private JTabbedPane MenuTab;
+    private JTabbedPane ProjectTab;
     private JPanel FollowupTab;
     private JPanel PotentialTab;
-    private JPanel ClientsTab;
     private JPanel ReportsTab;
-    private JButton addContactButton;
-    private JTextField facebookNameField;
-    private JTextField lastNameField;
-    private JTextField artistgroupNameField;
-    private JTextField emailField;
-    private JTextField websitesField;
-    private JTextField referencesField;
     private JButton FU_nextButton;
     private JButton FU_grabFollowupContactsButton;
     private JTextField FU_first;
@@ -60,7 +50,7 @@ public class MainPage extends JFrame{
     private JLabel FU_alertLabel;
     private JScrollPane FU_messageScrollPane;
     private JTable FU_noteTable;
-    private JPanel ProjectTab;
+    private JPanel PotentialProjectTab;
     private JButton PA_addProjectButton;
     private JTextField PA_projectTitleText;
     private JTextField PA_endDateText;
@@ -104,6 +94,16 @@ public class MainPage extends JFrame{
     private JTable CP_CompleteTable;
     private JButton CP_ChangeStatus;
     private JComboBox CP_StatusOptions;
+    private JTabbedPane Contacts;
+    private JPanel AddContactTab;
+    private JTextField facebookNameField;
+    private JTextField firstNameField;
+    private JTextField lastNameField;
+    private JTextField artistgroupNameField;
+    private JTextField emailField;
+    private JButton addContactButton;
+    private JTextField websitesField;
+    private JTextField referencesField;
 
     private int counter = 0;
 
@@ -139,13 +139,13 @@ public class MainPage extends JFrame{
             if(contactEmailExists()){
 
                 JOptionPane.showMessageDialog(this,
-                        "Cannot create. Contact with email "+emailField.getText().toString()+" already exists.",
+                        "Cannot create. Contact with email "+ emailField.getText().toString()+" already exists.",
                         "Warning",
                         JOptionPane.WARNING_MESSAGE);
 
             }else {
                 try {
-
+                    
                     controller.addContact(new Contact(firstNameField.getText(), lastNameField.getText(), artistgroupNameField.getText(), emailField.getText(), facebookNameField.getText(), websitesField.getText(), referencesField.getText()));
 
                     clearNewContactFields();
