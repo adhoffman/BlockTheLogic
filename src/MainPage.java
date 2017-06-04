@@ -321,6 +321,32 @@ public class MainPage extends JFrame{
         });
 
 
+        AP_ChangeProjectStatus.addActionListener((ActionEvent e) -> {
+
+            System.out.println("Select Row:  "+AP_ActiveTable.getSelectedRow());
+
+            for(int j = 0; j< activeProjectList.size(); j++){
+                for(int i=0; i< AP_ActiveTable.getColumnCount();i++) {
+                    
+                        String currentCell = AP_ActiveTable.getValueAt(AP_ActiveTable.getSelectedRow(),i).toString();
+
+
+                        if (activeProjectList.get(j).getContactEmail().equals(currentCell)){
+                        System.out.println(activeProjectList.get(j).getContactEmail());
+
+                            try {
+                                controller.changeProjectStatus(activeProjectList.get(j), AP_StatusOptions.getSelectedItem().toString());
+                            } catch (SQLException e1) {
+                                e1.printStackTrace();
+                            }
+
+                        }
+                }
+            }
+            populateAllProjectsTables();
+
+        });
+
         /*
         PD_ChangeProjectStatusButton.addActionListner(new ActionListener() {
         @Override
@@ -607,6 +633,7 @@ public class MainPage extends JFrame{
     private void setupAutoSortTableHeaders() {
         PP_projectTable.setAutoCreateRowSorter(true);
         PD_pendDepProjectTable.setAutoCreateRowSorter(true);
+        AP_ActiveTable.setAutoCreateRowSorter(true);
 
     }
 
