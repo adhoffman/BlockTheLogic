@@ -400,6 +400,43 @@ public class MainPage extends JFrame{
 
         });
 
+        PendP_ChangeStatusButton.addActionListener((ActionEvent e) -> {
+
+            for(int i=0; i< PendP_PendingPaymentTable.getColumnCount();i++) {
+
+                for(int j = 0; j< pendingPaymentProjectList.size(); j++){
+                    {
+                        String currentCell = PendP_PendingPaymentTable.getValueAt(PendP_PendingPaymentTable.getSelectedRow(), i).toString();
+                        if (pendingPaymentProjectList.get(j).getContactEmail().equals(currentCell)){
+
+                            if(!PendP_StatusOptions.getSelectedItem().equals("")) {
+
+                                try {
+                                    controller.changeProjectStatus(pendingPaymentProjectList.get(j), PendP_StatusOptions.getSelectedItem().toString());
+
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                                Project project = pendingPaymentProjectList.get(j);
+                                changeProjectStatus(project, PendP_StatusOptions.getSelectedItem().toString());
+                                moveProjectToDifferentList(project, PendP_StatusOptions.getSelectedItem().toString());
+                                pendingPaymentProjectList.remove(j);
+
+
+
+                            }
+
+                        }
+                    }
+
+                }
+            }
+
+            populateAllProjectsTables();
+
+        });
+
 
     }
 
