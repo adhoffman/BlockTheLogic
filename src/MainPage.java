@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +10,8 @@ import java.util.Collections;
  * Created by alexhoffman on 4/12/17.
  */
 public class MainPage extends JFrame{
-    private ArrayList<Contact> contactList;
+    private ArrayList<Contact> followupContactList;
+    private ArrayList<Contact> allContactsList;
     private ArrayList<Note> noteList;
     private ArrayList<Project> potentialProjectList;
     private ArrayList<Project> pendingDepositProjectList;
@@ -144,6 +144,12 @@ public class MainPage extends JFrame{
                 e1.printStackTrace();
             }
 
+            try {
+                populateProjectContactComboBox();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+
         });
 
         FU_nextButton.addActionListener((ActionEvent e) -> {
@@ -155,14 +161,14 @@ public class MainPage extends JFrame{
 
                 //Send out queries updating current account, and update counter
                 try {
-                    setFollowupDateforCurrentContact(contactList.get(counter));
+                    setFollowupDateforCurrentContact(followupContactList.get(counter));
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
                 //Add note to contact
                 try {
                     if(FU_messageTextArea.getText().length()>0) {
-                        createNoteForCurrentUser(contactList.get(counter), FU_messageTextArea.getText(), FU_communicationComboBox.getSelectedItem().toString());
+                        createNoteForCurrentUser(followupContactList.get(counter), FU_messageTextArea.getText(), FU_communicationComboBox.getSelectedItem().toString());
                     }
                 } catch (SQLException e1) {
                     e1.printStackTrace();
@@ -172,7 +178,7 @@ public class MainPage extends JFrame{
 
 
                 //If end of list, clear fields and disable button
-                if (contactList.size() == counter) {
+                if (followupContactList.size() == counter) {
 
                     endOfFollowupContacts();
 
@@ -180,14 +186,14 @@ public class MainPage extends JFrame{
                     if ((followupTextAreaLargerThanZero()) && (emailFieldNotBlank())) {
 
                         FU_alertLabel.setText("Messagebox Populdated");
-                        if (contactList.size() == counter) {
+                        if (followupContactList.size() == counter) {
                             endOfFollowupContacts();
                             clearNoteTable();
 
 
                         } else//if Not end fo list, get next account and populate textfields
                         {
-                            Contact contact = contactList.get(counter);
+                            Contact contact = followupContactList.get(counter);
                             setFollupTextFields(contact);
 
                             try {
@@ -212,19 +218,19 @@ public class MainPage extends JFrame{
 
 
 
-                contactList = controller.getFollowup();
+                followupContactList = controller.getFollowup();
                 clearFollowupFields();
 
                 FU_nextButton.setBorderPainted(true);
                 FU_nextButton.setFocusPainted(true);
                 FU_nextButton.setText("Next");
 
-                if(contactList.size()==counter){
+                if(followupContactList.size()==counter){
                     endOfFollowupContacts();
                     clearNoteTable();
                 }else
                 {
-                    Contact contact = contactList.get(counter);
+                    Contact contact = followupContactList.get(counter);
                     setFollupTextFields(contact);
                     populateNoteListTableForContact();
 
@@ -679,7 +685,7 @@ public class MainPage extends JFrame{
 
     private void setupProjectAddComboBoxes() throws SQLException {
 
-        setupProjectContactComboBox();
+        populateProjectContactComboBox();
         setupSongCountComboBox();
         setupServiceTypeComboBox();
 
@@ -722,16 +728,22 @@ public class MainPage extends JFrame{
         PA_songCountCombo.addItem("20+");
     }
 
-    private void setupProjectContactComboBox() throws SQLException {
-        ArrayList<Contact> contacts = controller.getContactListbyNameAndEmail();
+    private void populateProjectContactComboBox() throws SQLException {
+        refreshContactsListFromDatabase();
 
-        Collections.sort(contacts);
+        PA_contactCombobox.removeAllItems();
 
-        for(int i =0;contacts.size()>i;i++) {
-            PA_contactCombobox.addItem(contacts.get(i).getEmail());
+        Collections.sort(allContactsList);
+
+        for(int i =0;allContactsList.size()>i;i++) {
+            PA_contactCombobox.addItem(allContactsList.get(i).getEmail());
 
         }
 
+    }
+
+    private void refreshContactsListFromDatabase() throws SQLException {
+         allContactsList = controller.getContactListbyNameAndEmail();
     }
 
     private void disableFollowUpNextButton() {
@@ -754,7 +766,7 @@ public class MainPage extends JFrame{
 
     private void populateNoteListTableForContact() throws SQLException {
         noteList = controller.getNotes();
-        DefaultTableModel noteTableModel = populateNoteTableModel(contactList.get(counter));
+        DefaultTableModel noteTableModel = populateNoteTableModel(followupContactList.get(counter));
         FU_noteTable.setModel(noteTableModel);
 
     }
