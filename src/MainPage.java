@@ -362,6 +362,44 @@ public class MainPage extends JFrame{
 
         });
 
+        RP_ChangeStatus.addActionListener((ActionEvent e) -> {
+
+
+            for(int i=0; i< RP_RevisionProjectsTable.getColumnCount();i++) {
+
+                for(int j = 0; j< revisionProjectsList.size(); j++){
+                    {
+                        String currentCell = RP_RevisionProjectsTable.getValueAt(RP_RevisionProjectsTable.getSelectedRow(), i).toString();
+                        if (revisionProjectsList.get(j).getContactEmail().equals(currentCell)){
+
+                            if(!RP_StatusOptions.getSelectedItem().equals("")) {
+
+                                try {
+                                    controller.changeProjectStatus(revisionProjectsList.get(j), RP_StatusOptions.getSelectedItem().toString());
+
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                                Project project = revisionProjectsList.get(j);
+                                changeProjectStatus(project, RP_StatusOptions.getSelectedItem().toString());
+                                moveProjectToDifferentList(project, RP_StatusOptions.getSelectedItem().toString());
+                                revisionProjectsList.remove(j);
+
+
+
+                            }
+
+                        }
+                    }
+
+                }
+            }
+
+            populateAllProjectsTables();
+
+        });
+
 
     }
 
