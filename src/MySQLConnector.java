@@ -86,7 +86,7 @@ public class MySQLConnector {
         return wrapper.getNoteList(resultSet);
     }
 
-    public ArrayList<Contact> getContactByNameAndEmail(String query) throws SQLException {
+    public ArrayList<Contact> getContactlist(String query) throws SQLException {
         connection = DriverManager.getConnection("jdbc:mysql://"+this.ipAddress+":"+this.port+"/"+this.database, this.user, this.password);
         statement = null;
         try {
@@ -96,7 +96,7 @@ public class MySQLConnector {
         }
 
         ResultSet resultSet = statement.executeQuery(query);
-        return wrapper.getContactListByNameAndEmail(resultSet);
+        return wrapper.getContactList(resultSet);
     }
 
     public Contact getContactIDByEmail(String query) throws SQLException {

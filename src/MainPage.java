@@ -104,12 +104,14 @@ public class MainPage extends JFrame{
     private JButton addContactButton;
     private JTextField websitesField;
     private JTextField referencesField;
+    private JPanel AllContactsTab;
+    private JTable allContactsTable;
 
     private int counter = 0;
 
 
     public MainPage(DataController controller) throws SQLException {
-        super("BlockTheLogic");
+        super("Studio Buddy");
         this.controller = controller;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension (1200, 750));
@@ -118,19 +120,23 @@ public class MainPage extends JFrame{
 
         setVisible(true);
 
+        rootPane.setBackground(Color.darkGray);
+
+
+        refreshContactsListFromDatabase();
         setFollowupTextDisable();
         setFU_messageAreasettings();
         populateFU_CommunicationCombobox();
         disableFollowUpNextButton();
 
         setupProjectAddComboBoxes();
-
         setupAutoSortTableHeaders();
 
         refreshAllProjectsFromDatabase();
         populateAllProjectsTables();
         populatProjectStatusOptionsComboBoxes();
 
+        populateAllContactsTable();
 
 
 
@@ -145,8 +151,9 @@ public class MainPage extends JFrame{
 
             }else {
                 try {
-                    
-                    controller.addContact(new Contact(firstNameField.getText(), lastNameField.getText(), artistgroupNameField.getText(), emailField.getText(), facebookNameField.getText(), websitesField.getText(), referencesField.getText()));
+
+                    Contact contact = new Contact(firstNameField.getText(), lastNameField.getText(), artistgroupNameField.getText(), emailField.getText(), facebookNameField.getText(), websitesField.getText(), referencesField.getText());
+                    controller.addContact(contact);
 
                     clearNewContactFields();
                 } catch (SQLException e1) {
@@ -154,10 +161,13 @@ public class MainPage extends JFrame{
                 }
 
                 try {
-                    populateProjectContactComboBox();
+                    refreshContactsListFromDatabase();
                 } catch (SQLException e1) {
                     e1.printStackTrace();
                 }
+
+                populateProjectContactComboBox();
+                populateAllContactsTable();
             }
 
         });
@@ -490,6 +500,24 @@ public class MainPage extends JFrame{
 
     }
 
+    private void populateAllContactsTable() {
+
+        String col[] = {"First Name","Last Name","Email","Completed Projects","Artist/Group","Last Contact Date","Create Date","Followup Date"};
+
+            DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+            for(int i = 0;i<allContactsList.size();i++){
+                Contact contact = allContactsList.get(i);
+
+                String row[] = {contact.getFirstName(),contact.getLastName(),contact.getEmail(),Integer.toString(contact.getNumberOfCompletedProjects()),contact.getArtistGroupName(),contact.getLastContactDate(),contact.getCreateDate(),contact.getFollowupDate()};
+                tableModel.addRow(row);
+
+            }
+
+        allContactsTable.setModel(tableModel);
+
+    }
+
     private boolean contactEmailExists() {
 
         for(int i=0;i<allContactsList.size();i++){
@@ -749,8 +777,7 @@ public class MainPage extends JFrame{
         PA_songCountCombo.addItem("20+");
     }
 
-    private void populateProjectContactComboBox() throws SQLException {
-        refreshContactsListFromDatabase();
+    private void populateProjectContactComboBox() {
 
         PA_contactCombobox.removeAllItems();
 
@@ -764,7 +791,7 @@ public class MainPage extends JFrame{
     }
 
     private void refreshContactsListFromDatabase() throws SQLException {
-         allContactsList = controller.getContactListbyNameAndEmail();
+         allContactsList = controller.getContactList();
     }
 
     private void disableFollowUpNextButton() {

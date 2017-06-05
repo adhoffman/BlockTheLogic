@@ -122,4 +122,12 @@ public class Contact implements Comparable<Contact>{
     public int compareTo(Contact other) {
         return this.email.compareTo(other.email);
     }
+
+    public int getNumberOfCompletedProjects() {
+        return this.numberOfCompletedProjects;
+    }
+
+    public String getCreateDate() {
+        return this.createDate;
+    }
 }

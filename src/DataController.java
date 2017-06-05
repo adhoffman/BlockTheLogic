@@ -151,11 +151,11 @@ public class DataController {
     }
 
 
-    public ArrayList<Contact> getContactListbyNameAndEmail() throws SQLException {
+    public ArrayList<Contact> getContactList() throws SQLException {
 
-        String query = "SELECT idCONTACT,EMAIL,FIRST_NAME,LAST_NAME FROM CONTACT";
+        String query = "SELECT * FROM CONTACT";
 
-        return connector.getContactByNameAndEmail(query);
+        return connector.getContactlist(query);
     }
 
     public void addProject(Project project) throws SQLException {
