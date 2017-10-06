@@ -106,6 +106,8 @@ public class MainPage extends JFrame{
     private JTextField referencesField;
     private JPanel AllContactsTab;
     private JTable allContactsTable;
+    private JTextField PA_inputProjectString;
+    private JLabel PA_inputProjectStringLabel;
 
     private int counter = 0;
 
@@ -264,20 +266,32 @@ public class MainPage extends JFrame{
 
         PA_addProjectButton.addActionListener(e -> {
 
-            Project newProject = new Project(PA_projectTitleText.getText(),PA_contactCombobox.getSelectedItem().toString(),PA_startDateText.getText(),PA_endDateText.getText(),PA_dueDateText.getText(),PA_songCountCombo.getSelectedItem().toString(),PA_serviceTypeCombo.getSelectedItem().toString(),PA_totalCost.getText());
-            try {
-                controller.addProject(newProject);
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
 
-            try {
-                potentialProjectList = controller.getPotentialProjects();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
+            if(projectInputStringIsBlank()) {
+                Project newProject = new Project(PA_projectTitleText.getText(), PA_contactCombobox.getSelectedItem().toString(), PA_startDateText.getText(), PA_endDateText.getText(), PA_dueDateText.getText(), PA_songCountCombo.getSelectedItem().toString(), PA_serviceTypeCombo.getSelectedItem().toString(), PA_totalCost.getText());
+                try {
+                    controller.addProject(newProject);
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
+                try {
+                    potentialProjectList = controller.getPotentialProjects();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+                resetAddProjectFields();
+                populateAllProjectsTables();
+            }else
+            {
+
+                Project newProject = InputParser.parseProjectInput(PA_inputProjectString.getText());
+
+
+                resetAddProjectFields();
+                populateAllProjectsTables();
+
             }
-            resetAddProjectFields();
-            populateAllProjectsTables();
 
         });
 
@@ -497,6 +511,18 @@ public class MainPage extends JFrame{
             populateAllProjectsTables();
 
         });
+
+    }
+
+
+    private boolean projectInputStringIsBlank() {
+
+        if(PA_inputProjectString.getText().equals(""))
+        {
+            return true;
+        } else {
+        return false;
+}
 
     }
 

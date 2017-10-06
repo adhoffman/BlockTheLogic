@@ -30,19 +30,6 @@ public class Project {
     }
 
 
-/*
-    public Project(String ID, String project_title, String email, String due_date, String song_count, String service_type, String project_status, String total_cost) {
-        this.ID = Integer.parseInt(ID);
-        this.projectTitle = project_title;
-        this.contactEmail = email;
-        this.dueDate = due_date;
-        this.songCount = Integer.parseInt(song_count);
-        this.serviceType = service_type;
-        this.status = project_status;
-        this.totalCost = Double.parseDouble(total_cost);
-    }
-*/
-
     public Project(String ID, String startDate, String endDate, String contactID, String contactEmail, String projectTitle, String songCount, String serviceType, String totalCost, String projectStatus, String dueDate, String adjustmentAmt ) {
         this.ID = Integer.parseInt(ID);
         this.startDate = startDate;
@@ -57,12 +44,16 @@ public class Project {
         this.totalCost = Double.parseDouble(totalCost);
     }
 
+    public Project() {
 
-    public String getContactEmail() {
+    }
+
+
+    String getContactEmail() {
         return contactEmail;
     }
 
-    public String getTitle() {
+    String getTitle() {
         return projectTitle;
     }
 
